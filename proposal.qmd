@@ -26,22 +26,71 @@ execute:
 pacman::p_load(tidyverse)
 ```
 
+## Project Goal
+
+Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be.
+
+## Questions
+
+1.  How effectively can a neural network predict employee stress levels worldwide using specific individual and career-related metadata?
+
+2.  How does the dropout technique impact the performance and optimization of a neural network in predicting stress levels?
+
 ## Dataset
 
 ```{r}
 #| label: load-dataset
 #| message: false
 
+# Set the path to the CSV file
+dataset_path <- "data/Impact_of_Remote_Work_on_Mental_Health.csv"  # Adjust this to the actual path
+
+# Load the dataset into a dataframe
+data <- read.csv(dataset_path)
+
+# Preview the dataset
+head(data)
+
 ```
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
+```{r}
+summary(data)
+```
 
-Make sure to load the data and use inline code for some of this information.
+### Dataset Description
 
-## Questions
+This dataset contains information on **5000 employees** from various industries, focusing on demographics, work-related factors, and mental health. It includes **20 variables**, such as age, job role, work location, mental health condition, work-life balance, and productivity changes.
 
-The two questions you want to answer.
+#### **Dimensions**:
 
-## Analysis plan
+-   **Rows**: 5000 (employees)
+-   **Columns**: 20 (attributes like Age, Gender, Job Role, etc.)
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+#### **Key Variables**:
+
+-   **Numerical**: Age, Years of Experience, Hours Worked, Stress Level, Social Isolation, etc.
+-   **Categorical**: Gender, Job Role, Work Location, Mental Health Condition, etc.
+
+#### **Provenance**:
+
+The dataset appears synthetic, created for studying employee wellbeing, workplace dynamics, and productivity. It reflects common variables used in employee surveys or organizational studies.
+
+#### **Reason for Choosing**:
+
+This dataset is relevant for exploring the impact of work environments (remote, hybrid, onsite) on employee mental health, work-life balance, and productivity. It’s ideal for analyzing workplace wellbeing, stress, and diversity, making it valuable for HR and organizational research.
+
+## Priors - Parameters & Hyperparameters
+
+Since Gaussian distributions are smooth and differentiable and crucial for optimization in neural networks, we will use Gaussians as our priors, utilizing the parameters **age**, **gender**, **industry**, **work location**, and **hours worked** as main features. We will also explore the possibility of other parameters influencing the priors.
+
+Since we plan on using a basic feedforward neural network with a few layers, we need to set the values ( \mu ) (mean) and ( \sigma ) (standard deviation) for the model parameters: the weights (( W\_{ij} )) and biases (( b_j )).
+
+-   The weights ( W\_{ij} ) will tend to take on positive or negative values for ( \mu ), and for the standard deviation ( \sigma ), we set:
+
+    \[ W\_{ij} \sim \mathcal{N}(0, 0.5) \]
+
+-   Since biases are often kept near 0 in basic feedforward neural networks, we have chosen ( \mu ) and ( \sigma ) to reflect this:
+
+    \[ b_j \sim \mathcal{N}(0, 0.1) \]
+
+These parameters depend on the values we set for hyperparameters. For our initial test, we plan on using: - **2 hidden layers** - **50 neurons per layer** - **ReLU activation** for the hidden layers - **Softmax function** for the output layer - **Dropout rate (p) of 0.3**, since the model tends to overfit the data when ( p = 0.1 ) and also overfits when ( p = 0.5.

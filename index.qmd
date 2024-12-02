@@ -20,10 +20,3 @@ execute:
 ## Abstract
 
 Add project abstract here.
-
-```{r}
-
-install.packages("nnet")
-library(nnet)
-
-```
