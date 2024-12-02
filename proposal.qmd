@@ -29,6 +29,155 @@ library(tidyverse)
 ```{r}
 #| label: load-dataset
 #| message: false
+
+# Install & load libraries
+install.packages("tensorflow")
+install.packages("keras")
+install.packages("writexl")
+install.packages("torch")
+
+library(readxl)
+library(tensorflow)
+library(keras)
+library(dplyr)
+library(torch)
+
+keras::install_keras()
+
+# Define input and output dimensions
+input_dim <- 20  # Replace with the number of features in your dataset
+output_dim <- 3  # Replace with the number of classes in your dataset
+
+# Define a custom weight initializer for Gaussian distribution
+custom_initializer <- function(mean, stddev) {
+  keras::initializer_random_normal(mean = mean, stddev = stddev)
+}
+
+# Data normalization
+data <- read_excel("data/factored_dataset.xlsx")
+
+normalize <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+data_normalized <- as.data.frame(lapply(data, normalize))
+
+input_vectors <- as.matrix(data_normalized)
+
+input_reshaped <- array(input_vectors, dim = c(nrow(input_vectors), 1, ncol(input_vectors)))
+
+# Extract target variable
+target <- data_normalized$Stress_Level_Factors
+target <- as.integer(as.factor(target))  # Ensure the target is integer
+
+num_classes <- length(unique(target))
+
+# Adjust the target to start from 1 (R indexing starts at 1, and the nn_cross_entropy_loss expects 1-based indexing)
+target_tensor <- torch_tensor(target, dtype = torch_long())
+
+# Split data into training and testing sets
+set.seed(123)
+train_indices <- sample(1:nrow(data_normalized), 0.8 * nrow(data_normalized))
+
+x_train <- input_reshaped[train_indices,,]
+y_train <- target_tensor[train_indices]
+x_test <- input_reshaped[-train_indices,,]
+y_test <- target_tensor[-train_indices]
+
+# Convert data to tensors
+x_train_tensor <- torch_tensor(x_train, dtype = torch_float())
+y_train_tensor <- torch_tensor(y_train, dtype = torch_long())  # Ensure target is LongTensor
+x_test_tensor <- torch_tensor(x_test, dtype = torch_float())
+y_test_tensor <- torch_tensor(y_test, dtype = torch_long())  # Ensure target is LongTensor
+
+# Define the neural network model with dropout and ReLU activation
+model <- nn_module(
+  "NNModel",
+  initialize = function(input_size, hidden_size, output_size, dropout_rate) {
+    self$fc1 <- nn_linear(input_size, hidden_size)
+    self$fc2 <- nn_linear(hidden_size, hidden_size)
+    self$fc3 <- nn_linear(hidden_size, output_size)
+    self$dropout <- nn_dropout(p = dropout_rate)
+  },
+  forward = function(x) {
+    x <- self$fc1(x)
+    x <- nnf_relu(x)
+    x <- self$dropout(x)
+    
+    x <- self$fc2(x)
+    x <- nnf_relu(x)
+    x <- self$dropout(x)
+    
+    x <- self$fc3(x)
+    x <- nnf_softmax(x, dim = 1)  # Softmax activation for classification (correct dimension)
+    x
+  }
+)
+
+# Initialize model with the correct parameters
+input_size <- dim(x_train_tensor)[2]  # Number of features (19 in this case)
+hidden_size <- 50                    # Number of neurons in hidden layers
+output_size <- num_classes            # Number of output classes
+dropout_rate <- 0.3                   # Dropout rate
+
+# Instantiate the model
+nn_model <- model(input_size, hidden_size, output_size, dropout_rate)
+
+# Define loss and optimizer
+criterion <- nn_cross_entropy_loss()
+optimizer <- optim_adam(nn_model$parameters, lr = 0.001)
+
+# Training loop
+epochs <- 20
+batch_size <- 32
+num_batches <- ceiling(nrow(x_train) / batch_size)
+
+for (epoch in 1:epochs) {
+  nn_model$train()
+  epoch_loss <- 0
+  
+  for (batch in 1:num_batches) {
+    start_idx <- (batch - 1) * batch_size + 1
+    end_idx <- min(batch * batch_size, nrow(x_train))
+    
+    # Ensure the batch dimensions are correct
+    batch_x <- x_train_tensor[start_idx:end_idx,]
+    batch_y <- y_train_tensor[start_idx:end_idx]
+    
+    # Forward pass
+    optimizer$zero_grad()
+    outputs <- nn_model(batch_x)
+    loss <- criterion(outputs, batch_y)
+    
+    # Backward pass and optimization
+    loss$backward()
+    optimizer$step()
+    
+    epoch_loss <- epoch_loss + loss$item()
+  }
+  
+  cat(sprintf("Epoch [%d/%d], Loss: %.4f\n", epoch, epochs, epoch_loss / num_batches))
+}
+
+# Evaluation
+nn_model$eval()
+with_no_grad({
+  # Get predictions from the model
+  predictions <- nn_model(x_test_tensor)
+  
+  # Calculate the test loss
+  test_loss <- criterion(predictions, y_test_tensor)$item()
+  
+  # Convert predictions to class indices
+  predicted_classes <- torch_argmax(predictions, dim = 1)$to(dtype = torch_long())
+  
+  # Calculate accuracy
+  accuracy <- mean((predicted_classes == y_test_tensor)$to(dtype = torch_float()))
+  
+  cat(sprintf("Test Loss: %.4f\n", test_loss))
+  cat(sprintf("Test Accuracy: %.2f%%\n", accuracy * 100))
+})
+
 ```
 
 A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
