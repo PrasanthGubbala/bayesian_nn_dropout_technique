@@ -1,11 +1,11 @@
 ---
-title: "Proposal title"
+title: "Regularization of Bayesian NN"
 subtitle: "Proposal"
 author: 
-  - name: "Team Name"
+  - name: "Dropout Dynamics"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "Project description"
+description: "This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model's generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being."
 format:
   html:
     code-tools: true
@@ -19,9 +19,11 @@ execute:
 ---
 
 ```{r}
-#| label: load-pkgs
-#| message: false
-library(tidyverse)
+#| label: load-packages
+#| include: false
+
+# Load packages here
+pacman::p_load(tidyverse)
 ```
 
 ## Dataset
