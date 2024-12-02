@@ -35,12 +35,16 @@ install.packages("tensorflow")
 install.packages("keras")
 install.packages("writexl")
 install.packages("torch")
+install.packages("reticulate")
 
+library(reticulate)
 library(readxl)
 library(tensorflow)
 library(keras)
 library(dplyr)
 library(torch)
+
+use_virtualenv("C:/Code/Virtual Environment/venv/tensorflow_env")
 
 keras::install_keras()
 
