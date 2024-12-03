@@ -1,11 +1,11 @@
 ---
-title: "Project Title"
-subtitle: "INFO 526 - Fall 2024 - Project 01"
+title: "Regularization of Bayesian NN by Dropout Technique"
+subtitle: "INFO 510 - Fall 2024 - Final Project"
 author: 
-  - name: "Team name"
+  - name: "Dropout Dynamics"
     affiliations:
       - name: "School of Information, University of Arizona"
-description: "Project description"
+description: "This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model's generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being."
 format:
    html:
     code-tools: true
@@ -19,8 +19,284 @@ execute:
 
 ## Abstract
 
-Add project abstract here.
+This project aims to develop a **Bayesian Neural Network** with **Monte Carlo Dropout** to predict employee stress levels (low, medium, high) based on metadata such as age, gender, job role, industry, and work hours. The model will utilize a stratified dataset of 5,000 employee samples, with 19 variables representing different aspects of employee well-being. By incorporating dropout regularization, the model will enhance generalization and estimate prediction uncertainty. The goal is to evaluate how well the network can predict stress levels and the impact of dropout on model performance, ultimately providing organizations with insights to better support employee well-being.
+
+## Introduction
+
+Employee stress significantly impacts productivity and well-being in the workplace. This project aims to develop a **Bayesian Neural Network** (BNN) to predict employee stress levels (low, medium, high) using demographic and job-related data. We will apply **Monte Carlo Dropout** to regularize the model, improving performance and providing uncertainty estimates in predictions.
+
+Using a stratified dataset of 5,000 employees, the model will help organizations predict stress levels and make data-driven decisions to support employee well-being.
+
+## Dataset Description
+
+The dataset used in this project is the **Remote Work & Mental Health** dataset from Kaggle (2024). It includes **5,000 stratified samples** of employees across various industries and countries. The dataset captures a wide range of factors that influence employee stress, making it ideal for predicting stress levels based on multiple variables.
+
+### Key Variables:
+
+1.  **Age** – Age of the employee.
+2.  **Gender** – Gender of the employee (e.g., Male, Female, Non-binary).
+3.  **Job Role** – Role of the employee (e.g., HR, Data Scientist, Software Engineer).
+4.  **Industry** – Industry the employee works in (e.g., Healthcare, IT, Manufacturing).
+5.  **Years of Experience** – Total years the employee has worked.
+6.  **Work Location** – Type of work arrangement (Remote, Hybrid, Onsite).
+7.  **Hours Worked Per Week** – Average number of hours worked weekly.
+8.  **Number of Virtual Meetings** – Frequency of virtual meetings the employee attends.
+9.  **Work Life Balance Rating** – Employee's self-assessed work-life balance.
+10. **Stress Level** – Stress level (Low, Medium, High) (response variable).
+11. **Mental Health Condition** – Whether the employee has a reported mental health condition.
+12. **Access to Mental Health Resources** – Whether the employee has access to mental health resources.
+13. **Productivity Change** – Change in productivity (Increase, Decrease, No Change).
+14. **Social Isolation Rating** – Employee's rating of social isolation.
+15. **Satisfaction with Remote Work** – How satisfied the employee is with remote work.
+16. **Company Support for Remote Work** – Support from the company for remote work.
+17. **Physical Activity** – Frequency of physical activity (e.g., Daily, Weekly).
+18. **Sleep Quality** – Employee's self-assessed sleep quality.
+19. **Region** – Geographic region of the employee (e.g., Europe, North America, Asia).
+
+### Purpose:
+
+These variables provide a comprehensive view of the factors that contribute to employee stress. By using this dataset, we can build a predictive model that helps organizations understand the key factors affecting employee well-being and tailor interventions accordingly.
+
+## Research Questions
+
+The primary goal of this project is to explore the effectiveness of predicting employee stress levels using machine learning techniques. Specifically, we aim to address the following research questions:
+
+1.  **How effectively can a neural network predict employee stress levels worldwide based on individual and career-related metadata?**\
+    This question focuses on evaluating the ability of a neural network to learn from diverse features, such as age, job role, and mental health, to predict stress levels across a global workforce.
+
+2.  **How does the Monte Carlo Dropout technique impact the performance and optimization of a neural network in predicting stress levels?**\
+    This question explores the effect of **Monte Carlo Dropout** on model performance by improving generalization, reducing overfitting, and providing uncertainty estimates for predictions.
+
+## Approach Overview
+
+To predict employee stress levels using a **Bayesian Neural Network** (BNN) with **Monte Carlo Dropout**, we will follow a structured approach involving data preprocessing, model development, and performance evaluation.
+
+### 1. **Data Preprocessing**
+
+-   **Data Cleaning**: Handle missing values, outliers, and ensure consistency across variables.
+-   **Feature Engineering**: Create additional features if necessary, such as aggregating work hours or categorizing health-related conditions.
+-   **Normalization**: Normalize numerical features (e.g., age, hours worked) to improve model convergence and stability.
+-   **Encoding**: Convert categorical variables (e.g., gender, job role, work location) into appropriate formats (e.g., one-hot encoding or label encoding).
+
+### 2. **Model Development**
+
+-   **Neural Network Architecture**: Build a feedforward neural network with 2 hidden layers and 50 neurons per layer. Use the **ReLU activation** function for the hidden layers and a **Softmax activation** function for the output layer.
+-   **Monte Carlo Dropout**: Implement Monte Carlo Dropout during both training and inference to reduce overfitting and provide uncertainty estimates for predictions.
+-   **Loss Function & Optimization**: Use **cross-entropy loss** for classification and the **Adam optimizer** to minimize the loss.
+
+### 3. **Model Training**
+
+-   **Data Split**: Split the dataset into an **80/20 train-test split** to evaluate model performance.
+-   **Hyperparameter Tuning**: Tune key hyperparameters such as the number of layers, neurons, dropout rate, and learning rate using **k-fold cross-validation**.
+
+### 4. **Performance Evaluation**
+
+-   **Accuracy**: Measure model performance using accuracy, precision, recall, and F1-score for each stress level category (low, medium, high).
+-   **Uncertainty Estimation**: Assess the uncertainty in predictions using Monte Carlo Dropout by averaging over multiple forward passes.
+-   **Model Interpretability**: Explore which features contribute most to the model’s predictions using techniques like **SHAP values**.
+
+### 5. **Insights and Application**
+
+-   Provide actionable insights for organizations to improve employee well-being based on predicted stress levels and key contributing factors.
+-   Evaluate the impact of various metadata (e.g., job role, work location, mental health conditions) on stress predictions.
+
+## 1. Data Loading & Preprocessing
 
 ```{r}
+# Load the necessary libraries
+library(readr)
+library(dplyr)
+
+# Load the data
+employee_data <- read_csv("data/Impact_of_Remote_Work_on_Mental_Health.csv")
+
+# Check the first few rows of the data
+# head(employee_data)
+
+# Check for missing values
+# summary(employee_data)
+
+# colSums(is.na(employee_data)) 
+
+# Example of replacing NA in 'Mental_Health_Condition' with 'Unknown'
+employee_data$Mental_Health_Condition[is.na(employee_data$Mental_Health_Condition)] <- "Unknown"
+
+# If you want to remove rows with NA values
+employee_data <- na.omit(employee_data)
+
+
+```
+
+```{r}
+# Load required package
+library(dplyr)
+
+# Function to remove outliers using IQR for all numeric columns
+remove_outliers_all <- function(df) {
+  # Loop over each column in the data frame
+  for (col_name in names(df)) {
+    # Check if the column is numeric
+    if (is.numeric(df[[col_name]])) {
+      Q1 <- quantile(df[[col_name]], 0.25, na.rm = TRUE)
+      Q3 <- quantile(df[[col_name]], 0.75, na.rm = TRUE)
+      IQR_value <- Q3 - Q1
+      lower_bound <- Q1 - 1.5 * IQR_value
+      upper_bound <- Q3 + 1.5 * IQR_value
+      
+      # Filter rows where values are within the bounds
+      df <- df %>% filter(df[[col_name]] >= lower_bound & df[[col_name]] <= upper_bound)
+    }
+  }
+  return(df)
+}
+
+# Example: Removing outliers in all numeric columns of employee_data
+employee_data_clean <- remove_outliers_all(employee_data)
+
+# Print the cleaned data
+# print(employee_data_clean)
+
+```
+
+```{r}
+# Step 1: Select the relevant features
+df_relevant <- employee_data_clean %>%
+  select(Work_Location, Hours_Worked_Per_Week, Work_Life_Balance_Rating, 
+         Mental_Health_Condition, Social_Isolation_Rating, 
+         Satisfaction_with_Remote_Work, Sleep_Quality, Stress_Level)  # assuming 'Stress_Level' is the target variable
+```
+
+```{r}
+# Step 4: Feature Engineering
+# Create a new 'Health_Condition_Severity' feature based on 'Mental_Health_Condition'
+df_relevant$Health_Condition_Severity <- ifelse(df_relevant$Mental_Health_Condition %in% c("Depression", "Burnout", "Anxiety"), "High", "Low")
+
+# Categorize 'Hours_Worked_Per_Week' into ranges (Low, Medium, High)
+df_relevant$Work_Hours_Category <- cut(df_relevant$Hours_Worked_Per_Week, 
+                                       breaks = c(0, 35, 45, Inf), 
+                                       labels = c("Low", "Medium", "High"))
+
+df = df_relevant
+```
+
+```{r}
+
+
+
+# Convert the target variable to a factor & factors into dummy variables (one-hot encoding)
+# 0, 1, 2 for Setosa, Versicolor, Virginica
+df$Work_Location <- as.factor(df$Work_Location)
+df$Work_Location <- as.numeric(df$Work_Location) - 1  
+
+df$Mental_Health_Condition <- as.factor(df$Mental_Health_Condition)
+df$Mental_Health_Condition <- as.numeric(df$Mental_Health_Condition) - 1 
+
+df$Satisfaction_with_Remote_Work <- as.factor(df$Satisfaction_with_Remote_Work)
+df$Satisfaction_with_Remote_Work <- as.numeric(df$Satisfaction_with_Remote_Work) - 1 
+
+df$Sleep_Quality <- as.factor(df$Sleep_Quality)
+df$Sleep_Quality <- as.numeric(df$Sleep_Quality) - 1 
+
+df$Stress_Level <- as.factor(df$Stress_Level)
+df$Stress_Level <- as.numeric(df$Stress_Level) - 1 
+
+df$Health_Condition_Severity <- as.factor(df$Health_Condition_Severity)
+df$Health_Condition_Severity <- as.numeric(df$Health_Condition_Severity) - 1 
+
+df$Work_Hours_Category <- as.factor(df$Work_Hours_Category)
+df$Work_Hours_Category <- as.numeric(df$Work_Hours_Category) - 1 
+
+```
+
+```{r}
+
+# Normalize the features
+df_without_target <- as.data.frame(scale(df[, setdiff(names(df), "Stress_Level")]))  # Only scale the features
+
+# Combine the scaled features and the target label
+df <- cbind(df_without_target, Stress_Level = df$Stress_Level)
+```
+
+```{r}
+# Install Keras if not already installed
+# Load the keras library
+library(keras)
+library(dplyr)
+library(tidyr)
+
+# Install TensorFlow backend (if you haven't already installed it)
+# install_keras()
+```
+
+```{r}
+# Split the data into training and testing sets (80-20 split)
+set.seed(42)  # For reproducibility
+index <- sample(1:nrow(df), size = 0.8 * nrow(df))
+train_data <- df[index, ]
+test_data <- df[-index, ]
+
+# Separate features and target labels
+x_train <- as.matrix(train_data[, 1:9])
+y_train <- to_categorical(train_data$Stress_Level, 3)  # Convert to one-hot encoding
+
+x_test <- as.matrix(test_data[, 1:9])
+y_test <- to_categorical(test_data$Stress_Level, 3)
+```
+
+## 2. **Model Development**
+
+```{r}
+# Define the neural network model with 2 hidden layers and dropout
+model <- keras_model_sequential() %>%
+  # First hidden layer with 128 neurons and ReLU activation
+  layer_dense(units = 128, activation = "relu", input_shape = dim(x_train)[2]) %>%
+  # Dropout layer for regularization (Monte Carlo Dropout)
+  layer_dropout(rate = 0.3) %>%
+  
+  # Second hidden layer with 64 neurons and ReLU activation
+  layer_dense(units = 64, activation = "relu") %>%
+  # Dropout layer again
+  layer_dropout(rate = 0.4) %>%
+  
+  # third hidden layer with 32 neurons and ReLU activation
+  layer_dense(units = 32, activation = "relu") %>%
+  # Dropout layer again
+  layer_dropout(rate = 0.5) %>%
+  
+  # third hidden layer with 16 neurons and ReLU activation
+  layer_dense(units = 16, activation = "relu") %>%
+  # Dropout layer again
+  layer_dropout(rate = 0.6) %>%
+  
+  # Output layer with Softmax activation for multi-class classification
+  layer_dense(units = 3, activation = "softmax")
+
+# Compile the model with cross-entropy loss and Adam optimizer
+model %>% compile(
+  loss = "categorical_crossentropy",
+  optimizer = optimizer_adam(),
+  metrics = c("accuracy")
+)
+
+# Display the model summary
+summary(model)
+
+history <- model %>% fit(
+  x_train, y_train,
+  epochs = 50,
+  batch_size = 5,
+  validation_data = list(x_test, y_test)
+)
+```
+
+```{r}
+model %>% evaluate(x_test, y_test)
+
+```
+
+```{r}
+predictions <- model %>% predict(x_test)
+predicted_classes <- max.col(predictions) - 1  # Convert from one-hot to class index
+# print(predicted_classes)
 
 ```
