@@ -4,12 +4,10 @@ format: html
 editor: visual
 ---
 
-This project was developed by **\[Team Name\]** For [INFO 526 - Data Analysis and Visualization](https://datavizaz.org/) at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.
+This project was developed by **Team Dropout Dynamics** For [INFO 510 FA24 002 Bayesian Inference](https://d2l.arizona.edu/d2l/home/1512466 "INFO 510 FA24 002") at the University of Arizona, taught by Dr. Kunal Arekar The team is comprised of the following team members.
 
--   Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).
+-   ***Prasanth Gubbala***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
 
--   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).
+-   ***Kendali Beaver***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
 
--   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
-
--   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
+-   ***Venkata Satya Murali***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
