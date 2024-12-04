@@ -1,0 +1,268 @@
+[
+  {
+    "objectID": "proposal.html",
+    "href": "proposal.html",
+    "title": "Regularization of Bayesian NN",
+    "section": "",
+    "text": "Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be."
+  },
+  {
+    "objectID": "proposal.html#dataset",
+    "href": "proposal.html#dataset",
+    "title": "Regularization of Bayesian NN",
+    "section": "Dataset",
+    "text": "Dataset\n\n# Set the path to the CSV file\ndataset_path &lt;- \"data/Impact_of_Remote_Work_on_Mental_Health.csv\"  # Adjust this to the actual path\n\n# Load the dataset into a dataframe\ndata &lt;- read.csv(dataset_path)\n\n# Preview the dataset\nhead(data)\n\n  Employee_ID Age     Gender          Job_Role   Industry Years_of_Experience\n1     EMP0001  32 Non-binary                HR Healthcare                  13\n2     EMP0002  40     Female    Data Scientist         IT                   3\n3     EMP0003  59 Non-binary Software Engineer  Education                  22\n4     EMP0004  27       Male Software Engineer    Finance                  20\n5     EMP0005  49       Male             Sales Consulting                  32\n6     EMP0006  59 Non-binary             Sales         IT                  31\n  Work_Location Hours_Worked_Per_Week Number_of_Virtual_Meetings\n1        Hybrid                    47                          7\n2        Remote                    52                          4\n3        Hybrid                    46                         11\n4        Onsite                    32                          8\n5        Onsite                    35                         12\n6        Hybrid                    39                          3\n  Work_Life_Balance_Rating Stress_Level Mental_Health_Condition\n1                        2       Medium              Depression\n2                        1       Medium                 Anxiety\n3                        5       Medium                 Anxiety\n4                        4         High              Depression\n5                        2         High                    None\n6                        4         High                    None\n  Access_to_Mental_Health_Resources Productivity_Change Social_Isolation_Rating\n1                                No            Decrease                       1\n2                                No            Increase                       3\n3                                No           No Change                       4\n4                               Yes            Increase                       3\n5                               Yes            Decrease                       3\n6                                No            Increase                       5\n  Satisfaction_with_Remote_Work Company_Support_for_Remote_Work\n1                   Unsatisfied                               1\n2                     Satisfied                               2\n3                   Unsatisfied                               5\n4                   Unsatisfied                               3\n5                   Unsatisfied                               3\n6                   Unsatisfied                               1\n  Physical_Activity Sleep_Quality        Region\n1            Weekly          Good        Europe\n2            Weekly          Good          Asia\n3              None          Poor North America\n4              None          Poor        Europe\n5            Weekly       Average North America\n6              None       Average South America\n\n\n\nsummary(data)\n\n Employee_ID             Age        Gender            Job_Role        \n Length:5000        Min.   :22   Length:5000        Length:5000       \n Class :character   1st Qu.:31   Class :character   Class :character  \n Mode  :character   Median :41   Mode  :character   Mode  :character  \n                    Mean   :41                                        \n                    3rd Qu.:51                                        \n                    Max.   :60                                        \n   Industry         Years_of_Experience Work_Location     \n Length:5000        Min.   : 1.00       Length:5000       \n Class :character   1st Qu.: 9.00       Class :character  \n Mode  :character   Median :18.00       Mode  :character  \n                    Mean   :17.81                         \n                    3rd Qu.:26.00                         \n                    Max.   :35.00                         \n Hours_Worked_Per_Week Number_of_Virtual_Meetings Work_Life_Balance_Rating\n Min.   :20.00         Min.   : 0.000             Min.   :1.000           \n 1st Qu.:29.00         1st Qu.: 4.000             1st Qu.:2.000           \n Median :40.00         Median : 8.000             Median :3.000           \n Mean   :39.61         Mean   : 7.559             Mean   :2.984           \n 3rd Qu.:50.00         3rd Qu.:12.000             3rd Qu.:4.000           \n Max.   :60.00         Max.   :15.000             Max.   :5.000           \n Stress_Level       Mental_Health_Condition Access_to_Mental_Health_Resources\n Length:5000        Length:5000             Length:5000                      \n Class :character   Class :character        Class :character                 \n Mode  :character   Mode  :character        Mode  :character                 \n                                                                             \n                                                                             \n                                                                             \n Productivity_Change Social_Isolation_Rating Satisfaction_with_Remote_Work\n Length:5000         Min.   :1.000           Length:5000                  \n Class :character    1st Qu.:2.000           Class :character             \n Mode  :character    Median :3.000           Mode  :character             \n                     Mean   :2.994                                        \n                     3rd Qu.:4.000                                        \n                     Max.   :5.000                                        \n Company_Support_for_Remote_Work Physical_Activity  Sleep_Quality     \n Min.   :1.000                   Length:5000        Length:5000       \n 1st Qu.:2.000                   Class :character   Class :character  \n Median :3.000                   Mode  :character   Mode  :character  \n Mean   :3.008                                                        \n 3rd Qu.:4.000                                                        \n Max.   :5.000                                                        \n    Region         \n Length:5000       \n Class :character  \n Mode  :character  \n                   \n                   \n                   \n\n\n\nDataset Description\nThis dataset contains information on 5000 employees from various industries, focusing on demographics, work-related factors, and mental health. It includes 20 variables, such as age, job role, work location, mental health condition, work-life balance, and productivity changes.\n\nDimensions:\n\nRows: 5000 (employees)\nColumns: 20 (attributes like Age, Gender, Job Role, etc.)\n\n\n\nKey Variables:\n\nNumerical: Age, Years of Experience, Hours Worked, Stress Level, Social Isolation, etc.\nCategorical: Gender, Job Role, Work Location, Mental Health Condition, etc.\n\n\n\nProvenance:\nThe dataset appears synthetic, created for studying employee wellbeing, workplace dynamics, and productivity. It reflects common variables used in employee surveys or organizational studies.\n\n\nReason for Choosing:\nThis dataset is relevant for exploring the impact of work environments (remote, hybrid, onsite) on employee mental health, work-life balance, and productivity. It’s ideal for analyzing workplace wellbeing, stress, and diversity, making it valuable for HR and organizational research."
+  },
+  {
+    "objectID": "proposal.html#questions",
+    "href": "proposal.html#questions",
+    "title": "Regularization of Bayesian NN",
+    "section": "Questions",
+    "text": "Questions\n\nHow effectively can a neural network predict employee stress levels worldwide using specific individual and career-related metadata?\nHow does the dropout technique impact the performance and optimization of a neural network in predicting stress levels?"
+  },
+  {
+    "objectID": "proposal.html#analysis-plan",
+    "href": "proposal.html#analysis-plan",
+    "title": "Proposal title",
+    "section": "Analysis plan",
+    "text": "Analysis plan\n\nA plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any)."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "",
+    "text": "This project aims to develop a Bayesian Neural Network with Monte Carlo Dropout to predict employee stress levels (low, medium, high) based on metadata such as age, gender, job role, industry, and work hours. The model will utilize a stratified dataset of 5,000 employee samples, with 19 variables representing different aspects of employee well-being. By incorporating dropout regularization, the model will enhance generalization and estimate prediction uncertainty. The goal is to evaluate how well the network can predict stress levels and the impact of dropout on model performance, ultimately providing organizations with insights to better support employee well-being."
+  },
+  {
+    "objectID": "index.html#abstract",
+    "href": "index.html#abstract",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "",
+    "text": "This project aims to develop a Bayesian Neural Network with Monte Carlo Dropout to predict employee stress levels (low, medium, high) based on metadata such as age, gender, job role, industry, and work hours. The model will utilize a stratified dataset of 5,000 employee samples, with 19 variables representing different aspects of employee well-being. By incorporating dropout regularization, the model will enhance generalization and estimate prediction uncertainty. The goal is to evaluate how well the network can predict stress levels and the impact of dropout on model performance, ultimately providing organizations with insights to better support employee well-being."
+  },
+  {
+    "objectID": "presentation.html#quarto",
+    "href": "presentation.html#quarto",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Quarto",
+    "text": "Quarto\n\nThe presentation is created using the Quarto CLI\n## sets the start of a new slide"
+  },
+  {
+    "objectID": "presentation.html#layouts",
+    "href": "presentation.html#layouts",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Layouts",
+    "text": "Layouts\nYou can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis\n\nAnd add footnotes"
+  },
+  {
+    "objectID": "presentation.html#code",
+    "href": "presentation.html#code",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Code",
+    "text": "Code\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic       p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n1 (Intercept)   25.3      3.08        8.22 0.00000000358\n2 speed         -0.116    0.0642     -1.81 0.0806       \n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    0.0983        0.0682  5.82      3.27  0.0806     1  -101.  207.  212.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
+  },
+  {
+    "objectID": "presentation.html#plots",
+    "href": "presentation.html#plots",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Plots",
+    "text": "Plots"
+  },
+  {
+    "objectID": "presentation.html#plot-and-text",
+    "href": "presentation.html#plot-and-text",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Plot and text",
+    "text": "Plot and text\n\n\n\nSome text\ngoes here"
+  },
+  {
+    "objectID": "presentation.html#tables",
+    "href": "presentation.html#tables",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Tables",
+    "text": "Tables\nIf you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,\n\n\n\n\n\nspecies\nisland\nbill_length_mm\nbill_depth_mm\nflipper_length_mm\nbody_mass_g\nsex\n\n\n\n\nAdelie\nTorgersen\n39.1\n18.7\n181\n3750\nmale\n\n\nAdelie\nTorgersen\n39.5\n17.4\n186\n3800\nfemale\n\n\nAdelie\nTorgersen\n40.3\n18.0\n195\n3250\nfemale\n\n\nAdelie\nTorgersen\nNA\nNA\nNA\nNA\nNA\n\n\nAdelie\nTorgersen\n36.7\n19.3\n193\n3450\nfemale\n\n\nAdelie\nTorgersen\n39.3\n20.6\n190\n3650\nmale"
+  },
+  {
+    "objectID": "presentation.html#images",
+    "href": "presentation.html#images",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Images",
+    "text": "Images\n\nImage credit: Danielle Navarro, Percolate."
+  },
+  {
+    "objectID": "presentation.html#math-expressions",
+    "href": "presentation.html#math-expressions",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Math Expressions",
+    "text": "Math Expressions\nYou can write LaTeX math expressions inside a pair of dollar signs, e.g. $\\alpha+\\beta$ renders \\(\\alpha + \\beta\\). You can use the display style with double dollar signs:\n$$\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i$$\n\\[\n\\bar{X}=\\frac{1}{n}\\sum_{i=1}^nX_i\n\\]\nLimitations:\n\nThe source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting $$ must appear in the very beginning of a line, followed immediately by a non-space character, and the ending $$ must be at the end of a line, led by a non-space character;\nThere should not be spaces after the opening $ or before the closing $."
+  },
+  {
+    "objectID": "presentation.html#feeling-adventurous",
+    "href": "presentation.html#feeling-adventurous",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Feeling adventurous?",
+    "text": "Feeling adventurous?\n\nYou are welcomed to use the default styling of the slides. In fact, that’s what I expect majority of you will do. You will differentiate yourself with the content of your presentation.\nBut some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This project was developed by Team Dropout Dynamics For INFO 510 FA24 002 Bayesian Inference at the University of Arizona, taught by Dr. Kunal Arekar The team is comprised of the following team members.\n\nPrasanth Gubbala: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.\nKendali Beaver: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.\nVenkata Satya Murali: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona."
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Introduction",
+    "text": "Introduction\nEmployee stress significantly impacts productivity and well-being in the workplace. This project aims to develop a Bayesian Neural Network (BNN) to predict employee stress levels (low, medium, high) using demographic and job-related data. We will apply Monte Carlo Dropout to regularize the model, improving performance and providing uncertainty estimates in predictions.\nUsing a stratified dataset of 5,000 employees, the model will help organizations predict stress levels and make data-driven decisions to support employee well-being."
+  },
+  {
+    "objectID": "index.html#dataset-description",
+    "href": "index.html#dataset-description",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Dataset Description",
+    "text": "Dataset Description\nThe dataset used in this project is the Remote Work & Mental Health dataset from Kaggle (2024). It includes 5,000 stratified samples of employees across various industries and countries. The dataset captures a wide range of factors that influence employee stress, making it ideal for predicting stress levels based on multiple variables.\n\nKey Variables:\n\nAge – Age of the employee.\nGender – Gender of the employee (e.g., Male, Female, Non-binary).\nJob Role – Role of the employee (e.g., HR, Data Scientist, Software Engineer).\nIndustry – Industry the employee works in (e.g., Healthcare, IT, Manufacturing).\nYears of Experience – Total years the employee has worked.\nWork Location – Type of work arrangement (Remote, Hybrid, Onsite).\nHours Worked Per Week – Average number of hours worked weekly.\nNumber of Virtual Meetings – Frequency of virtual meetings the employee attends.\nWork Life Balance Rating – Employee’s self-assessed work-life balance.\nStress Level – Stress level (Low, Medium, High) (response variable).\nMental Health Condition – Whether the employee has a reported mental health condition.\nAccess to Mental Health Resources – Whether the employee has access to mental health resources.\nProductivity Change – Change in productivity (Increase, Decrease, No Change).\nSocial Isolation Rating – Employee’s rating of social isolation.\nSatisfaction with Remote Work – How satisfied the employee is with remote work.\nCompany Support for Remote Work – Support from the company for remote work.\nPhysical Activity – Frequency of physical activity (e.g., Daily, Weekly).\nSleep Quality – Employee’s self-assessed sleep quality.\nRegion – Geographic region of the employee (e.g., Europe, North America, Asia).\n\n\n\nPurpose:\nThese variables provide a comprehensive view of the factors that contribute to employee stress. By using this dataset, we can build a predictive model that helps organizations understand the key factors affecting employee well-being and tailor interventions accordingly."
+  },
+  {
+    "objectID": "index.html#research-questions",
+    "href": "index.html#research-questions",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Research Questions",
+    "text": "Research Questions\nThe primary goal of this project is to explore the effectiveness of predicting employee stress levels using machine learning techniques. Specifically, we aim to address the following research questions:\n\nHow effectively can a neural network predict employee stress levels worldwide based on individual and career-related metadata?\nThis question focuses on evaluating the ability of a neural network to learn from diverse features, such as age, job role, and mental health, to predict stress levels across a global workforce.\nHow does the Monte Carlo Dropout technique impact the performance and optimization of a neural network in predicting stress levels?\nThis question explores the effect of Monte Carlo Dropout on model performance by improving generalization, reducing overfitting, and providing uncertainty estimates for predictions."
+  },
+  {
+    "objectID": "index.html#approach-overview",
+    "href": "index.html#approach-overview",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Approach Overview",
+    "text": "Approach Overview\nTo predict employee stress levels using a Bayesian Neural Network (BNN) with Monte Carlo Dropout, we will follow a structured approach involving data preprocessing, model development, and performance evaluation.\n\n1. Data Preprocessing\n\nData Cleaning: Handle missing values, outliers, and ensure consistency across variables.\nFeature Engineering: Create additional features if necessary, such as aggregating work hours or categorizing health-related conditions.\nNormalization: Normalize numerical features (e.g., age, hours worked) to improve model convergence and stability.\nEncoding: Convert categorical variables (e.g., gender, job role, work location) into appropriate formats (e.g., one-hot encoding or label encoding).\n\n\n\n2. Model Development\n\nNeural Network Architecture: Build a feedforward neural network with 2 hidden layers and 50 neurons per layer. Use the ReLU activation function for the hidden layers and a Softmax activation function for the output layer.\nMonte Carlo Dropout: Implement Monte Carlo Dropout during both training and inference to reduce overfitting and provide uncertainty estimates for predictions.\nLoss Function & Optimization: Use cross-entropy loss for classification and the Adam optimizer to minimize the loss.\n\n\n\n3. Model Training\n\nData Split: Split the dataset into an 80/20 train-test split to evaluate model performance.\nHyperparameter Tuning: Tune key hyperparameters such as the number of layers, neurons, dropout rate, and learning rate using k-fold cross-validation.\n\n\n\n4. Performance Evaluation\n\nAccuracy: Measure model performance using accuracy, precision, recall, and F1-score for each stress level category (low, medium, high).\nUncertainty Estimation: Assess the uncertainty in predictions using Monte Carlo Dropout by averaging over multiple forward passes.\nModel Interpretability: Explore which features contribute most to the model’s predictions using techniques like SHAP values.\n\n\n\n5. Insights and Application\n\nProvide actionable insights for organizations to improve employee well-being based on predicted stress levels and key contributing factors.\nEvaluate the impact of various metadata (e.g., job role, work location, mental health conditions) on stress predictions."
+  },
+  {
+    "objectID": "index.html#data-loading-preprocessing",
+    "href": "index.html#data-loading-preprocessing",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "1. Data Loading & Preprocessing",
+    "text": "1. Data Loading & Preprocessing\n\n\n  Work_Location Hours_Worked_Per_Week Work_Life_Balance_Rating\n1   -1.23521384             0.6227048               -0.6977601\n2    1.20351042             1.0442831               -1.4067218\n3   -1.23521384             0.5383892                1.4291249\n4   -0.01585171            -0.6420300                0.7201633\n5   -0.01585171            -0.3890830               -0.6977601\n6   -1.23521384            -0.0518204                0.7201633\n  Mental_Health_Condition Social_Isolation_Rating Satisfaction_with_Remote_Work\n1               0.4743371            -1.429642037                   1.219075175\n2              -1.3223943             0.004445672                  -0.007111885\n3              -1.3223943             0.721489526                   1.219075175\n4               0.4743371             0.004445672                   1.219075175\n5               1.3727028             0.004445672                   1.219075175\n6               1.3727028             1.438533381                   1.219075175\n  Sleep_Quality Health_Condition_Severity Work_Hours_Category Stress_Level\n1   -0.01400484                 -0.560663          1.20699585            2\n2   -0.01400484                 -0.560663          1.20699585            2\n3    1.21449030                 -0.560663          1.20699585            2\n4    1.21449030                 -0.560663         -1.09335836            0\n5   -1.24249999                  1.783246         -1.09335836            0\n6   -1.24249999                  1.783246          0.05681875            0"
+  },
+  {
+    "objectID": "index.html#model-development-1",
+    "href": "index.html#model-development-1",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "2. Model Development",
+    "text": "2. Model Development\n\n\nModel: \"sequential\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n dense_4 (Dense)                    (None, 128)                     1280        \n dropout_3 (Dropout)                (None, 128)                     0           \n dense_3 (Dense)                    (None, 64)                      8256        \n dropout_2 (Dropout)                (None, 64)                      0           \n dense_2 (Dense)                    (None, 32)                      2080        \n dropout_1 (Dropout)                (None, 32)                      0           \n dense_1 (Dense)                    (None, 16)                      528         \n dropout (Dropout)                  (None, 16)                      0           \n dense (Dense)                      (None, 3)                       51          \n================================================================================\nTotal params: 12195 (47.64 KB)\nTrainable params: 12195 (47.64 KB)\nNon-trainable params: 0 (0.00 Byte)\n________________________________________________________________________________"
+  },
+  {
+    "objectID": "index.html#model-training-1",
+    "href": "index.html#model-training-1",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "3. Model Training",
+    "text": "3. Model Training\n\n\nEpoch 1/50\n800/800 - 1s - loss: 1.1108 - accuracy: 0.3400 - val_loss: 1.0997 - val_accuracy: 0.3230 - 715ms/epoch - 894us/step\nEpoch 2/50\n800/800 - 0s - loss: 1.1024 - accuracy: 0.3413 - val_loss: 1.0989 - val_accuracy: 0.3280 - 380ms/epoch - 475us/step\nEpoch 3/50\n800/800 - 0s - loss: 1.1017 - accuracy: 0.3268 - val_loss: 1.0993 - val_accuracy: 0.3250 - 375ms/epoch - 469us/step\nEpoch 4/50\n800/800 - 0s - loss: 1.1001 - accuracy: 0.3277 - val_loss: 1.0988 - val_accuracy: 0.3070 - 372ms/epoch - 465us/step\nEpoch 5/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3338 - val_loss: 1.0987 - val_accuracy: 0.3360 - 378ms/epoch - 473us/step\nEpoch 6/50\n800/800 - 0s - loss: 1.1000 - accuracy: 0.3243 - val_loss: 1.0986 - val_accuracy: 0.3440 - 377ms/epoch - 471us/step\nEpoch 7/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3232 - val_loss: 1.0989 - val_accuracy: 0.3440 - 375ms/epoch - 469us/step\nEpoch 8/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3252 - val_loss: 1.0987 - val_accuracy: 0.3250 - 373ms/epoch - 466us/step\nEpoch 9/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3343 - val_loss: 1.0990 - val_accuracy: 0.3180 - 372ms/epoch - 464us/step\nEpoch 10/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3270 - val_loss: 1.0992 - val_accuracy: 0.3360 - 372ms/epoch - 465us/step\nEpoch 11/50\n800/800 - 0s - loss: 1.1000 - accuracy: 0.3293 - val_loss: 1.0987 - val_accuracy: 0.3300 - 373ms/epoch - 466us/step\nEpoch 12/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3212 - val_loss: 1.0988 - val_accuracy: 0.3150 - 376ms/epoch - 470us/step\nEpoch 13/50\n800/800 - 0s - loss: 1.0995 - accuracy: 0.3388 - val_loss: 1.0985 - val_accuracy: 0.3490 - 373ms/epoch - 466us/step\nEpoch 14/50\n800/800 - 0s - loss: 1.1007 - accuracy: 0.3408 - val_loss: 1.0986 - val_accuracy: 0.3440 - 372ms/epoch - 464us/step\nEpoch 15/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3315 - val_loss: 1.0979 - val_accuracy: 0.3430 - 375ms/epoch - 469us/step\nEpoch 16/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3325 - val_loss: 1.0983 - val_accuracy: 0.3430 - 372ms/epoch - 465us/step\nEpoch 17/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3210 - val_loss: 1.0976 - val_accuracy: 0.3440 - 377ms/epoch - 471us/step\nEpoch 18/50\n800/800 - 0s - loss: 1.0995 - accuracy: 0.3428 - val_loss: 1.0986 - val_accuracy: 0.3390 - 373ms/epoch - 466us/step\nEpoch 19/50\n800/800 - 0s - loss: 1.0999 - accuracy: 0.3223 - val_loss: 1.0985 - val_accuracy: 0.3340 - 376ms/epoch - 469us/step\nEpoch 20/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3250 - val_loss: 1.0985 - val_accuracy: 0.3350 - 374ms/epoch - 467us/step\nEpoch 21/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3248 - val_loss: 1.0984 - val_accuracy: 0.3410 - 372ms/epoch - 465us/step\nEpoch 22/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3302 - val_loss: 1.0986 - val_accuracy: 0.3400 - 376ms/epoch - 470us/step\nEpoch 23/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3300 - val_loss: 1.0990 - val_accuracy: 0.3250 - 374ms/epoch - 468us/step\nEpoch 24/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3358 - val_loss: 1.0985 - val_accuracy: 0.3440 - 374ms/epoch - 467us/step\nEpoch 25/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3280 - val_loss: 1.0987 - val_accuracy: 0.3340 - 371ms/epoch - 464us/step\nEpoch 26/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3305 - val_loss: 1.0986 - val_accuracy: 0.3410 - 373ms/epoch - 467us/step\nEpoch 27/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3388 - val_loss: 1.0987 - val_accuracy: 0.3250 - 373ms/epoch - 467us/step\nEpoch 28/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3313 - val_loss: 1.0986 - val_accuracy: 0.3440 - 373ms/epoch - 466us/step\nEpoch 29/50\n800/800 - 0s - loss: 1.0998 - accuracy: 0.3223 - val_loss: 1.0987 - val_accuracy: 0.3250 - 372ms/epoch - 465us/step\nEpoch 30/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3220 - val_loss: 1.0986 - val_accuracy: 0.3440 - 374ms/epoch - 467us/step\nEpoch 31/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3313 - val_loss: 1.0985 - val_accuracy: 0.3440 - 371ms/epoch - 464us/step\nEpoch 32/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3300 - val_loss: 1.0987 - val_accuracy: 0.3440 - 370ms/epoch - 463us/step\nEpoch 33/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3223 - val_loss: 1.0987 - val_accuracy: 0.3240 - 373ms/epoch - 466us/step\nEpoch 34/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3270 - val_loss: 1.0986 - val_accuracy: 0.3440 - 374ms/epoch - 468us/step\nEpoch 35/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3217 - val_loss: 1.0987 - val_accuracy: 0.3250 - 371ms/epoch - 463us/step\nEpoch 36/50\n800/800 - 0s - loss: 1.0995 - accuracy: 0.3395 - val_loss: 1.0985 - val_accuracy: 0.3440 - 373ms/epoch - 466us/step\nEpoch 37/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3360 - val_loss: 1.0986 - val_accuracy: 0.3440 - 373ms/epoch - 466us/step\nEpoch 38/50\n800/800 - 0s - loss: 1.0986 - accuracy: 0.3413 - val_loss: 1.0985 - val_accuracy: 0.3440 - 375ms/epoch - 469us/step\nEpoch 39/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3275 - val_loss: 1.0987 - val_accuracy: 0.3250 - 375ms/epoch - 469us/step\nEpoch 40/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3277 - val_loss: 1.0987 - val_accuracy: 0.3250 - 373ms/epoch - 466us/step\nEpoch 41/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3295 - val_loss: 1.0987 - val_accuracy: 0.3250 - 374ms/epoch - 467us/step\nEpoch 42/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3305 - val_loss: 1.0987 - val_accuracy: 0.3250 - 372ms/epoch - 466us/step\nEpoch 43/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3310 - val_loss: 1.0986 - val_accuracy: 0.3250 - 374ms/epoch - 467us/step\nEpoch 44/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3270 - val_loss: 1.0988 - val_accuracy: 0.3250 - 374ms/epoch - 467us/step\nEpoch 45/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3302 - val_loss: 1.0990 - val_accuracy: 0.3250 - 372ms/epoch - 465us/step\nEpoch 46/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3402 - val_loss: 1.0985 - val_accuracy: 0.3440 - 373ms/epoch - 466us/step\nEpoch 47/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3255 - val_loss: 1.0985 - val_accuracy: 0.3440 - 373ms/epoch - 466us/step\nEpoch 48/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3262 - val_loss: 1.0986 - val_accuracy: 0.3300 - 370ms/epoch - 462us/step\nEpoch 49/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3288 - val_loss: 1.0987 - val_accuracy: 0.3250 - 373ms/epoch - 467us/step\nEpoch 50/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3207 - val_loss: 1.0987 - val_accuracy: 0.3250 - 373ms/epoch - 466us/step"
+  },
+  {
+    "objectID": "index.html#performance-evaluation-1",
+    "href": "index.html#performance-evaluation-1",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "4. Performance Evaluation",
+    "text": "4. Performance Evaluation\n\n\n32/32 - 0s - loss: 1.0987 - accuracy: 0.3250 - 56ms/epoch - 2ms/step\n\n\n    loss accuracy \n1.098687 0.325000"
+  },
+  {
+    "objectID": "index.html#insights-and-application-1",
+    "href": "index.html#insights-and-application-1",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "5. Insights and Application",
+    "text": "5. Insights and Application\n\n\n32/32 - 0s - 39ms/epoch - 1ms/step\n\n\n   [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n  [38] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n  [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [149] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [186] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [223] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [260] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [297] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [334] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [371] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [408] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [445] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [482] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [519] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [556] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [593] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [630] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [667] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [704] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [741] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [778] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [815] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [852] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [889] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [926] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [963] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n[1000] 2"
+  },
+  {
+    "objectID": "proposal.html#project-goal",
+    "href": "proposal.html#project-goal",
+    "title": "Regularization of Bayesian NN",
+    "section": "",
+    "text": "Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be."
+  },
+  {
+    "objectID": "proposal.html#priors---parameters-hyperparameters",
+    "href": "proposal.html#priors---parameters-hyperparameters",
+    "title": "Regularization of Bayesian NN",
+    "section": "Priors - Parameters & Hyperparameters",
+    "text": "Priors - Parameters & Hyperparameters\nSince Gaussian distributions are smooth and differentiable and crucial for optimization in neural networks, we will use Gaussians as our priors, utilizing the parameters age, gender, industry, work location, and hours worked as main features. We will also explore the possibility of other parameters influencing the priors.\nSince we plan on using a basic feedforward neural network with a few layers, we need to set the values ( ) (mean) and ( ) (standard deviation) for the model parameters: the weights (( W_{ij} )) and biases (( b_j )).\n\nThe weights ( W_{ij} ) will tend to take on positive or negative values for ( ), and for the standard deviation ( ), we set:\n[ W_{ij} (0, 0.5) ]\nSince biases are often kept near 0 in basic feedforward neural networks, we have chosen ( ) and ( ) to reflect this:\n[ b_j (0, 0.1) ]\n\nThese parameters depend on the values we set for hyperparameters. For our initial test, we plan on using: - 2 hidden layers - 50 neurons per layer - ReLU activation for the hidden layers - Softmax function for the output layer - Dropout rate (p) of 0.3, since the model tends to overfit the data when ( p = 0.1 ) and also overfits when ( p = 0.5."
+  },
+  {
+    "objectID": "presentation.html",
+    "href": "presentation.html",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "",
+    "text": "Rows: 5000 Columns: 20\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (13): Employee_ID, Gender, Job_Role, Industry, Work_Location, Stress_Lev...\ndbl  (7): Age, Years_of_Experience, Hours_Worked_Per_Week, Number_of_Virtual...\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\nAttaching package: 'keras'\n\n\nThe following object is masked from 'package:yardstick':\n\n    get_weights"
+  },
+  {
+    "objectID": "presentation.html#footnotes",
+    "href": "presentation.html#footnotes",
+    "title": "Project title",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nAnd add footnotes↩︎"
+  },
+  {
+    "objectID": "presentation.html#neural-network-with-mc-dropout",
+    "href": "presentation.html#neural-network-with-mc-dropout",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Neural Network with MC Dropout",
+    "text": "Neural Network with MC Dropout\n\n\nModel: \"sequential\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n dense_4 (Dense)                    (None, 128)                     1280        \n dropout_3 (Dropout)                (None, 128)                     0           \n dense_3 (Dense)                    (None, 64)                      8256        \n dropout_2 (Dropout)                (None, 64)                      0           \n dense_2 (Dense)                    (None, 32)                      2080        \n dropout_1 (Dropout)                (None, 32)                      0           \n dense_1 (Dense)                    (None, 16)                      528         \n dropout (Dropout)                  (None, 16)                      0           \n dense (Dense)                      (None, 3)                       51          \n================================================================================\nTotal params: 12195 (47.64 KB)\nTrainable params: 12195 (47.64 KB)\nNon-trainable params: 0 (0.00 Byte)\n________________________________________________________________________________"
+  },
+  {
+    "objectID": "presentation.html#model-training",
+    "href": "presentation.html#model-training",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Model Training",
+    "text": "Model Training\n\n\nEpoch 1/50\n800/800 - 1s - loss: 1.1134 - accuracy: 0.3175 - val_loss: 1.0988 - val_accuracy: 0.3380 - 702ms/epoch - 878us/step\nEpoch 2/50\n800/800 - 0s - loss: 1.1013 - accuracy: 0.3130 - val_loss: 1.0985 - val_accuracy: 0.3430 - 365ms/epoch - 456us/step\nEpoch 3/50\n800/800 - 0s - loss: 1.0999 - accuracy: 0.3350 - val_loss: 1.0984 - val_accuracy: 0.3430 - 357ms/epoch - 446us/step\nEpoch 4/50\n800/800 - 0s - loss: 1.1001 - accuracy: 0.3187 - val_loss: 1.0985 - val_accuracy: 0.3440 - 357ms/epoch - 446us/step\nEpoch 5/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3368 - val_loss: 1.0984 - val_accuracy: 0.3250 - 357ms/epoch - 446us/step\nEpoch 6/50\n800/800 - 0s - loss: 1.1000 - accuracy: 0.3330 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step\nEpoch 7/50\n800/800 - 0s - loss: 1.0997 - accuracy: 0.3265 - val_loss: 1.0981 - val_accuracy: 0.3430 - 357ms/epoch - 447us/step\nEpoch 8/50\n800/800 - 0s - loss: 1.1003 - accuracy: 0.3288 - val_loss: 1.0985 - val_accuracy: 0.3420 - 356ms/epoch - 445us/step\nEpoch 9/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3347 - val_loss: 1.0986 - val_accuracy: 0.3360 - 355ms/epoch - 444us/step\nEpoch 10/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3388 - val_loss: 1.0986 - val_accuracy: 0.3400 - 361ms/epoch - 451us/step\nEpoch 11/50\n800/800 - 0s - loss: 1.1002 - accuracy: 0.3305 - val_loss: 1.0987 - val_accuracy: 0.3240 - 356ms/epoch - 445us/step\nEpoch 12/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3295 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step\nEpoch 13/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3332 - val_loss: 1.0988 - val_accuracy: 0.3420 - 360ms/epoch - 450us/step\nEpoch 14/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3228 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 15/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3290 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step\nEpoch 16/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3325 - val_loss: 1.0988 - val_accuracy: 0.3250 - 360ms/epoch - 450us/step\nEpoch 17/50\n800/800 - 0s - loss: 1.0998 - accuracy: 0.3325 - val_loss: 1.0989 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step\nEpoch 18/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3200 - val_loss: 1.0987 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step\nEpoch 19/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3307 - val_loss: 1.0986 - val_accuracy: 0.3240 - 359ms/epoch - 449us/step\nEpoch 20/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3380 - val_loss: 1.0986 - val_accuracy: 0.3320 - 353ms/epoch - 442us/step\nEpoch 21/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3282 - val_loss: 1.0987 - val_accuracy: 0.3210 - 355ms/epoch - 443us/step\nEpoch 22/50\n800/800 - 0s - loss: 1.1003 - accuracy: 0.3335 - val_loss: 1.0986 - val_accuracy: 0.3360 - 353ms/epoch - 441us/step\nEpoch 23/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3343 - val_loss: 1.0986 - val_accuracy: 0.3440 - 356ms/epoch - 445us/step\nEpoch 24/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3383 - val_loss: 1.0989 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step\nEpoch 25/50\n800/800 - 0s - loss: 1.0983 - accuracy: 0.3420 - val_loss: 1.0989 - val_accuracy: 0.3250 - 352ms/epoch - 440us/step\nEpoch 26/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3347 - val_loss: 1.0989 - val_accuracy: 0.3250 - 357ms/epoch - 447us/step\nEpoch 27/50\n800/800 - 0s - loss: 1.0995 - accuracy: 0.3205 - val_loss: 1.0986 - val_accuracy: 0.3440 - 352ms/epoch - 440us/step\nEpoch 28/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3207 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 29/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3335 - val_loss: 1.0988 - val_accuracy: 0.3250 - 358ms/epoch - 447us/step\nEpoch 30/50\n800/800 - 0s - loss: 1.0995 - accuracy: 0.3307 - val_loss: 1.0990 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 31/50\n800/800 - 0s - loss: 1.0993 - accuracy: 0.3405 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 32/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3343 - val_loss: 1.0988 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step\nEpoch 33/50\n800/800 - 0s - loss: 1.0987 - accuracy: 0.3368 - val_loss: 1.0987 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step\nEpoch 34/50\n800/800 - 0s - loss: 1.0990 - accuracy: 0.3230 - val_loss: 1.0988 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step\nEpoch 35/50\n800/800 - 0s - loss: 1.0985 - accuracy: 0.3380 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 445us/step\nEpoch 36/50\n800/800 - 0s - loss: 1.0991 - accuracy: 0.3275 - val_loss: 1.0987 - val_accuracy: 0.3250 - 352ms/epoch - 441us/step\nEpoch 37/50\n800/800 - 0s - loss: 1.0987 - accuracy: 0.3385 - val_loss: 1.0986 - val_accuracy: 0.3250 - 357ms/epoch - 446us/step\nEpoch 38/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3388 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 444us/step\nEpoch 39/50\n800/800 - 0s - loss: 1.0998 - accuracy: 0.3265 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 445us/step\nEpoch 40/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3262 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 41/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3275 - val_loss: 1.0986 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step\nEpoch 42/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3375 - val_loss: 1.0985 - val_accuracy: 0.3440 - 355ms/epoch - 444us/step\nEpoch 43/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3265 - val_loss: 1.0987 - val_accuracy: 0.3250 - 352ms/epoch - 440us/step\nEpoch 44/50\n800/800 - 0s - loss: 1.0994 - accuracy: 0.3295 - val_loss: 1.0986 - val_accuracy: 0.3440 - 353ms/epoch - 441us/step\nEpoch 45/50\n800/800 - 0s - loss: 1.0987 - accuracy: 0.3245 - val_loss: 1.0986 - val_accuracy: 0.3440 - 354ms/epoch - 443us/step\nEpoch 46/50\n800/800 - 0s - loss: 1.0987 - accuracy: 0.3167 - val_loss: 1.0987 - val_accuracy: 0.3250 - 409ms/epoch - 512us/step\nEpoch 47/50\n800/800 - 0s - loss: 1.0989 - accuracy: 0.3330 - val_loss: 1.0986 - val_accuracy: 0.3250 - 367ms/epoch - 459us/step\nEpoch 48/50\n800/800 - 0s - loss: 1.0996 - accuracy: 0.3185 - val_loss: 1.0987 - val_accuracy: 0.3250 - 360ms/epoch - 450us/step\nEpoch 49/50\n800/800 - 0s - loss: 1.0988 - accuracy: 0.3330 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step\nEpoch 50/50\n800/800 - 0s - loss: 1.0992 - accuracy: 0.3257 - val_loss: 1.0987 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step"
+  },
+  {
+    "objectID": "presentation.html#performance-evaluation",
+    "href": "presentation.html#performance-evaluation",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Performance Evaluation",
+    "text": "Performance Evaluation\n\n\n32/32 - 0s - loss: 1.0987 - accuracy: 0.3250 - 56ms/epoch - 2ms/step\n\n\n    loss accuracy \n  1.0987   0.3250"
+  },
+  {
+    "objectID": "presentation.html#insights-and-application",
+    "href": "presentation.html#insights-and-application",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Insights and Application",
+    "text": "Insights and Application\n\n\n32/32 - 0s - 41ms/epoch - 1ms/step\n\n\n   [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n  [38] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n  [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [149] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [186] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [223] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [260] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [297] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [334] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [371] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [408] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [445] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [482] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [519] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [556] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [593] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [630] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [667] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [704] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [741] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [778] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [815] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [852] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [889] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [926] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n [963] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2\n[1000] 2"
+  },
+  {
+    "objectID": "index.html#neural-network-with-mc-dropout",
+    "href": "index.html#neural-network-with-mc-dropout",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "2. Neural Network with MC Dropout",
+    "text": "2. Neural Network with MC Dropout\n\n\nModel: \"sequential\"\n________________________________________________________________________________\n Layer (type)                       Output Shape                    Param #     \n================================================================================\n dense_4 (Dense)                    (None, 128)                     1280        \n dropout_3 (Dropout)                (None, 128)                     0           \n dense_3 (Dense)                    (None, 64)                      8256        \n dropout_2 (Dropout)                (None, 64)                      0           \n dense_2 (Dense)                    (None, 32)                      2080        \n dropout_1 (Dropout)                (None, 32)                      0           \n dense_1 (Dense)                    (None, 16)                      528         \n dropout (Dropout)                  (None, 16)                      0           \n dense (Dense)                      (None, 3)                       51          \n================================================================================\nTotal params: 12195 (47.64 KB)\nTrainable params: 12195 (47.64 KB)\nNon-trainable params: 0 (0.00 Byte)\n________________________________________________________________________________"
+  },
+  {
+    "objectID": "index.html#model-architecture",
+    "href": "index.html#model-architecture",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Model Architecture:",
+    "text": "Model Architecture:\n\nInput Layer: Takes features from x_train.\nHidden Layers: Four layers with 128, 64, 32, and 16 neurons, using ReLU activation.\nDropout: Dropout applied after each layer with rates 0.3, 0.4, 0.5, and 0.6 to prevent overfitting. Monte Carlo Dropout keeps dropout active during inference for uncertainty estimation.\n\n\nOutput Layer:\n\nSoftmax activation for predicting three classes: low, medium, and high stress.\n\n\n\nTraining:\n\nLoss: Categorical cross-entropy for multi-class classification.\nOptimizer: Adam.\nEpochs: 50 with batch size 5."
+  },
+  {
+    "objectID": "index.html#conclusion",
+    "href": "index.html#conclusion",
+    "title": "Regularization of Bayesian NN by Dropout Technique",
+    "section": "Conclusion:",
+    "text": "Conclusion:\nThe model uses Monte Carlo Dropout for regularization and uncertainty estimation, which improves generalization and provides confidence in predictions, crucial for applications like predicting employee stress levels."
+  },
+  {
+    "objectID": "presentation.html#loss-and-validation-loss",
+    "href": "presentation.html#loss-and-validation-loss",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Loss and Validation Loss",
+    "text": "Loss and Validation Loss"
+  },
+  {
+    "objectID": "presentation.html#accuracy-and-validation-accuracy",
+    "href": "presentation.html#accuracy-and-validation-accuracy",
+    "title": "Regularization of Bayesian Neural Networks with Dropout Nodes",
+    "section": "Accuracy and Validation Accuracy",
+    "text": "Accuracy and Validation Accuracy"
+  }
+]
