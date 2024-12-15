@@ -108,111 +108,42 @@ library(readr)
 library(dplyr)
 
 # Load the data
-employee_data <- read_csv("data/Impact_of_Remote_Work_on_Mental_Health.csv")
+df <- read_csv("data/bankloan.csv")
 
-# Check the first few rows of the data
-# head(employee_data)
+# Review all predictors
+#summary(df)
 
-# Check for missing values
-# summary(employee_data)
+# Analyze Mortgage predictor
+# View mortgage $ data
+#range(df$Mortgage) # $0-$635
 
-# colSums(is.na(employee_data)) 
+# Count the number of values greater than 0 in the Mortgage column
+#count_above_zero <- sum(df$Mortgage > 0, na.rm = TRUE)
 
-# Example of replacing NA in 'Mental_Health_Condition' with 'Unknown'
-employee_data$Mental_Health_Condition[is.na(employee_data$Mental_Health_Condition)] <- "Unknown"
+# Get the total number of non-missing values in the column
+#total_values <- sum(!is.na(df$Mortgage))
 
-# If you want to remove rows with NA values
-employee_data <- na.omit(employee_data)
+# Calculate the proportion
+#proportion_above_zero <- count_above_zero / total_values
 
+# Print the results
+#count_above_zero # 1,538 ppl with mortgages
+#proportion_above_zero # 30.76% of people have loans
 
-```
+# Remove Mortgage
+#df <- select(df, -"Mortgage")
 
-```{r}
-# Load required package
-library(dplyr)
+# Normalize using Min-Max Scaling
+df <- df %>%
+  mutate(
+    Age = (Age - min(Age)) / (max(Age) - min(Age)),
+    Experience = (Experience - min(Experience)) / (max(Experience) - min(Experience)),
+    Income = (Income - min(Income)) / (max(Income) - min(Income)),
+    CCAvg = (CCAvg - min(CCAvg)) / (max(CCAvg) - min(CCAvg)),
+    Mortgage = (Mortgage - min(Mortgage, na.rm = TRUE)) / (max(Mortgage, na.rm = TRUE) - min(Mortgage, na.rm = TRUE))
+  )
 
-# Function to remove outliers using IQR for all numeric columns
-remove_outliers_all <- function(df) {
-  # Loop over each column in the data frame
-  for (col_name in names(df)) {
-    # Check if the column is numeric
-    if (is.numeric(df[[col_name]])) {
-      Q1 <- quantile(df[[col_name]], 0.25, na.rm = TRUE)
-      Q3 <- quantile(df[[col_name]], 0.75, na.rm = TRUE)
-      IQR_value <- Q3 - Q1
-      lower_bound <- Q1 - 1.5 * IQR_value
-      upper_bound <- Q3 + 1.5 * IQR_value
-      
-      # Filter rows where values are within the bounds
-      df <- df %>% filter(df[[col_name]] >= lower_bound & df[[col_name]] <= upper_bound)
-    }
-  }
-  return(df)
-}
-
-# Example: Removing outliers in all numeric columns of employee_data
-employee_data_clean <- remove_outliers_all(employee_data)
-
-# Print the cleaned data
-# print(employee_data_clean)
-
-```
-
-```{r}
-# Step 1: Select the relevant features
-df_relevant <- employee_data_clean %>%
-  select(Work_Location, Hours_Worked_Per_Week, Work_Life_Balance_Rating, 
-         Mental_Health_Condition, Social_Isolation_Rating, 
-         Satisfaction_with_Remote_Work, Sleep_Quality, Stress_Level)  # assuming 'Stress_Level' is the target variable
-```
-
-```{r}
-# Step 4: Feature Engineering
-# Create a new 'Health_Condition_Severity' feature based on 'Mental_Health_Condition'
-df_relevant$Health_Condition_Severity <- ifelse(df_relevant$Mental_Health_Condition %in% c("Depression", "Burnout", "Anxiety"), "High", "Low")
-
-# Categorize 'Hours_Worked_Per_Week' into ranges (Low, Medium, High)
-df_relevant$Work_Hours_Category <- cut(df_relevant$Hours_Worked_Per_Week, 
-                                       breaks = c(0, 35, 45, Inf), 
-                                       labels = c("Low", "Medium", "High"))
-
-df = df_relevant
-```
-
-```{r}
-# Convert the target variable to a factor & factors into dummy variables (one-hot encoding)
-# 0, 1, 2 for Setosa, Versicolor, Virginica
-df$Work_Location <- as.factor(df$Work_Location)
-df$Work_Location <- as.numeric(df$Work_Location) - 1  
-
-df$Mental_Health_Condition <- as.factor(df$Mental_Health_Condition)
-df$Mental_Health_Condition <- as.numeric(df$Mental_Health_Condition) - 1 
-
-df$Satisfaction_with_Remote_Work <- as.factor(df$Satisfaction_with_Remote_Work)
-df$Satisfaction_with_Remote_Work <- as.numeric(df$Satisfaction_with_Remote_Work) - 1 
-
-df$Sleep_Quality <- as.factor(df$Sleep_Quality)
-df$Sleep_Quality <- as.numeric(df$Sleep_Quality) - 1 
-
-df$Stress_Level <- as.factor(df$Stress_Level)
-df$Stress_Level <- as.numeric(df$Stress_Level) - 1 
-
-df$Health_Condition_Severity <- as.factor(df$Health_Condition_Severity)
-df$Health_Condition_Severity <- as.numeric(df$Health_Condition_Severity) - 1 
-
-df$Work_Hours_Category <- as.factor(df$Work_Hours_Category)
-df$Work_Hours_Category <- as.numeric(df$Work_Hours_Category) - 1 
-
-```
-
-```{r}
-
-# Normalize the features
-df_without_target <- as.data.frame(scale(df[, setdiff(names(df), "Stress_Level")]))  # Only scale the features
-
-# Combine the scaled features and the target label
-df <- cbind(df_without_target, Stress_Level = df$Stress_Level)
-head(df)
+summary(df)
 ```
 
 ```{r}
@@ -233,18 +164,18 @@ index <- sample(1:nrow(df), size = 0.8 * nrow(df))
 train_data <- df[index, ]
 test_data <- df[-index, ]
 
-# Separate features and target labels
-x_train <- as.matrix(train_data[, 1:9])
-y_train <- to_categorical(train_data$Stress_Level, 3)  # Convert to one-hot encoding
+## Separate features and target labels
+x_train <- as.matrix(train_data[, -8])  # Exclude the 8th column (response variable, Personal Loan)
+y_train <- (train_data$`Personal.Loan`)  # Use Personal Loan as target variable (0 or 1)
 
-x_test <- as.matrix(test_data[, 1:9])
-y_test <- to_categorical(test_data$Stress_Level, 3)
+x_test <- as.matrix(test_data[, -8])  # Exclude the 8th column (response variable, Personal Loan)
+y_test <- (test_data$`Personal.Loan`)  # Use Personal Loan as target variable (0 or 1)
 ```
 
 ## 2. Neural Network with MC Dropout
 
 ```{r}
-# Define the neural network model with 2 hidden layers and dropout
+# Define the neural network model with 'x' amount hidden layers and dropout
 model <- keras_model_sequential() %>%
   # First hidden layer with 128 neurons and ReLU activation
   layer_dense(units = 128, activation = "relu", input_shape = dim(x_train)[2]) %>%
@@ -266,19 +197,18 @@ model <- keras_model_sequential() %>%
   # Dropout layer again
   layer_dropout(rate = 0.6) %>%
   
-  # Output layer with Softmax activation for multi-class classification
-  layer_dense(units = 3, activation = "softmax")
+  # Output layer with Sigmoid activation for binary classification
+  layer_dense(units = 1, activation = "sigmoid")
 
-# Compile the model with cross-entropy loss and Adam optimizer
+## Compile the model with Adam optimizer and binary crossentropy loss
 model %>% compile(
-  loss = "categorical_crossentropy",
-  optimizer = optimizer_adam(),
+  loss = "binary_crossentropy",
+  optimizer = optimizer_adam(learning_rate = 0.001),
   metrics = c("accuracy")
 )
 
 # Display the model summary
 summary(model)
-
 ```
 
 ## 3. **Model Training**
@@ -286,7 +216,7 @@ summary(model)
 ```{r}
 history <- model %>% fit(
   x_train, y_train,
-  epochs = 50,
+  epochs = 30,
   batch_size = 5,
   validation_data = list(x_test, y_test)
 )
@@ -331,16 +261,14 @@ ggplot(history_df, aes(x = epoch)) +
 
 ```{r}
 model %>% evaluate(x_test, y_test)
-
 ```
 
 ## 5. **Insights and Application**
 
 ```{r}
 predictions <- model %>% predict(x_test)
-predicted_classes <- max.col(predictions) - 1  # Convert from one-hot to class index
+predicted_classes <- max.col(predictions)
 print(predicted_classes)
-
 ```
 
 ## Model Architecture:
@@ -362,3 +290,5 @@ print(predicted_classes)
 ## Conclusion:
 
 The model uses **Monte Carlo Dropout** for regularization and uncertainty estimation, which improves generalization and provides confidence in predictions, crucial for applications like predicting employee stress levels.
+
+DCA, see what variables are imprortant. Bayesian linear regression.
