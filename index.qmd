@@ -274,8 +274,20 @@ model %>% evaluate(x_test, y_test)
 
 ```{r}
 predictions <- model %>% predict(x_test)
-predicted_classes <- max.col(predictions)
-print(predicted_classes)
+predicted_classes <- ifelse(predictions > 0.5, 1, 0)
+
+# Reshape predicted_classes into a matrix with 10 columns
+reshaped_predictions <- matrix(predicted_classes, ncol = 10, byrow = TRUE)
+
+# Print the reshaped predictions
+print(reshaped_predictions)
+
+# Flatten the data frame into a single vector
+prop_of_loan_approvals <- as.vector(reshaped_predictions)
+
+# Count the number of 1's and 0's
+counts <- table(prop_of_loan_approvals)
+print(counts)
 ```
 
 ## Model Architecture:
