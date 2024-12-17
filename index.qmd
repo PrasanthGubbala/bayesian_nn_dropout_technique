@@ -73,7 +73,7 @@ To predict loan approval decisions using a **Bayesian Neural Network (BNN)** wit
 
 #### 2. **Model Development**
 
--   **Neural Network Architecture**: Develop a Bayesian Neural Network (BNN) with 4 hidden layers. The network consists of the following layers:
+-   **Neural Network Architecture**: Develop a BNN with 4 hidden layers. The network consists of the following layers:
 
     -   Layer 1: 128 neurons with ReLU activation
     -   Layer 2: 64 neurons with ReLU activation
@@ -100,7 +100,8 @@ To predict loan approval decisions using a **Bayesian Neural Network (BNN)** wit
 
 ### 5. **Insights and Application**
 
--   Our BNN model can determine with great accuracy the classification labels for determining if a loan applicant will be approved for a personal loan, but can be also be used for any type of classification task if given a correlated dataset.
+-   A BNN model has a high degree of accuracy in predicting classifations labels and is a good candidate to use alongside other classification models, such as Naive Bayes, Gradient Boosting, Support Vector Machines, etc.
+-   In the case of this dataset, financial institutions and loan originators can use a BNN model as supplemental analysis in their loan approval process, or use it to forecast changes in a loan porfolio. Likewise, consumers can use a BNN to analyze their chances of being approved for a loan and adjust variables on their end.
 
 ## 1. Data Loading & Preprocessing
 
@@ -295,6 +296,6 @@ print(predicted_classes)
 
 ## Conclusion:
 
-We were able to successfully produce a **BNN** that accurately predicts classification labels for a multi-variable dataset and keep said model from overfitting the data by utilizing the **MC Dropout** technique.
+We successfully produced a BNN that accurately predicts classification labels for a multi-variable dataset and keep said model from overfitting the data by utilizing the MC Dropout technique.
 
 While our model was used specifically to determine if a loan applicant would be approved for a personal loan, it can also be used to determine if an applicant will be approved for any type of loan (car, mortgage, business etc.) or applied to any field that has a sufficiently-sampled, correlated dataset, and still provide a high degree of accuracy in predicting classification labels.
