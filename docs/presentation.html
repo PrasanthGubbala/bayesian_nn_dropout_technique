@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Author names">
+<meta name="author" content="[Gubbala Durga Prasanth Kendall Beaver V.S. Murali Krishna Chittlu]">
 
 <title>Bayesian Neural Networks - Regularization of Bayesian Neural Networks with Dropout Nodes</title>
 <style>
@@ -145,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Regularization of Bayesian Neural Networks with Dropout Nodes</h1>
-<p class="subtitle lead">INFO 510 - Fall 2023 - Final Project</p>
+<p class="subtitle lead">INFO 510 Bayesian Modeling &amp; Inference - Fall 2023 - Final Project</p>
 </div>
 
 
@@ -155,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Author names </p>
+             <p>[Gubbala Durga Prasanth Kendall Beaver V.S. Murali Krishna Chittlu] </p>
           </div>
   </div>
     
@@ -170,21 +170,36 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="cell">
 <div class="cell-output cell-output-stderr">
-<pre><code>Rows: 5000 Columns: 20
+<pre><code>Rows: 5000 Columns: 12
 ── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
-chr (13): Employee_ID, Gender, Job_Role, Industry, Work_Location, Stress_Lev...
-dbl  (7): Age, Years_of_Experience, Hours_Worked_Per_Week, Number_of_Virtual...
+dbl (12): Age, Experience, Income, Family, CCAvg, Education, Mortgage, Perso...
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
-Attaching package: 'keras'
-
-
-The following object is masked from 'package:yardstick':
-
-    get_weights</code></pre>
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Age           Experience         Income           Family     
+ Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :1.000  
+ 1st Qu.:0.2727   1st Qu.:0.2826   1st Qu.:0.1435   1st Qu.:1.000  
+ Median :0.5000   Median :0.5000   Median :0.2593   Median :2.000  
+ Mean   :0.5077   Mean   :0.5023   Mean   :0.3045   Mean   :2.396  
+ 3rd Qu.:0.7273   3rd Qu.:0.7174   3rd Qu.:0.4167   3rd Qu.:3.000  
+ Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :4.000  
+     CCAvg          Education        Mortgage       Personal.Loan  
+ Min.   :0.0000   Min.   :1.000   Min.   :0.00000   Min.   :0.000  
+ 1st Qu.:0.0700   1st Qu.:1.000   1st Qu.:0.00000   1st Qu.:0.000  
+ Median :0.1500   Median :2.000   Median :0.00000   Median :0.000  
+ Mean   :0.1938   Mean   :1.881   Mean   :0.08897   Mean   :0.096  
+ 3rd Qu.:0.2500   3rd Qu.:3.000   3rd Qu.:0.15906   3rd Qu.:0.000  
+ Max.   :1.0000   Max.   :3.000   Max.   :1.00000   Max.   :1.000  
+ Securities.Account   CD.Account         Online         CreditCard   
+ Min.   :0.0000     Min.   :0.0000   Min.   :0.0000   Min.   :0.000  
+ 1st Qu.:0.0000     1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.000  
+ Median :0.0000     Median :0.0000   Median :1.0000   Median :0.000  
+ Mean   :0.1044     Mean   :0.0604   Mean   :0.5968   Mean   :0.294  
+ 3rd Qu.:0.0000     3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:1.000  
+ Max.   :1.0000     Max.   :1.0000   Max.   :1.0000   Max.   :1.000  </code></pre>
 </div>
 </div>
 <section id="neural-network-with-mc-dropout" class="level2">
@@ -195,7 +210,7 @@ The following object is masked from 'package:yardstick':
 ________________________________________________________________________________
  Layer (type)                       Output Shape                    Param #     
 ================================================================================
- dense_4 (Dense)                    (None, 128)                     1280        
+ dense_4 (Dense)                    (None, 128)                     1536        
  dropout_3 (Dropout)                (None, 128)                     0           
  dense_3 (Dense)                    (None, 64)                      8256        
  dropout_2 (Dropout)                (None, 64)                      0           
@@ -203,10 +218,10 @@ ________________________________________________________________________________
  dropout_1 (Dropout)                (None, 32)                      0           
  dense_1 (Dense)                    (None, 16)                      528         
  dropout (Dropout)                  (None, 16)                      0           
- dense (Dense)                      (None, 3)                       51          
+ dense (Dense)                      (None, 1)                       17          
 ================================================================================
-Total params: 12195 (47.64 KB)
-Trainable params: 12195 (47.64 KB)
+Total params: 12417 (48.50 KB)
+Trainable params: 12417 (48.50 KB)
 Non-trainable params: 0 (0.00 Byte)
 ________________________________________________________________________________</code></pre>
 </div>
@@ -216,106 +231,66 @@ ________________________________________________________________________________
 <h2 class="anchored" data-anchor-id="model-training"><strong>Model Training</strong></h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 1/50
-800/800 - 1s - loss: 1.1134 - accuracy: 0.3175 - val_loss: 1.0988 - val_accuracy: 0.3380 - 702ms/epoch - 878us/step
-Epoch 2/50
-800/800 - 0s - loss: 1.1013 - accuracy: 0.3130 - val_loss: 1.0985 - val_accuracy: 0.3430 - 365ms/epoch - 456us/step
-Epoch 3/50
-800/800 - 0s - loss: 1.0999 - accuracy: 0.3350 - val_loss: 1.0984 - val_accuracy: 0.3430 - 357ms/epoch - 446us/step
-Epoch 4/50
-800/800 - 0s - loss: 1.1001 - accuracy: 0.3187 - val_loss: 1.0985 - val_accuracy: 0.3440 - 357ms/epoch - 446us/step
-Epoch 5/50
-800/800 - 0s - loss: 1.0993 - accuracy: 0.3368 - val_loss: 1.0984 - val_accuracy: 0.3250 - 357ms/epoch - 446us/step
-Epoch 6/50
-800/800 - 0s - loss: 1.1000 - accuracy: 0.3330 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step
-Epoch 7/50
-800/800 - 0s - loss: 1.0997 - accuracy: 0.3265 - val_loss: 1.0981 - val_accuracy: 0.3430 - 357ms/epoch - 447us/step
-Epoch 8/50
-800/800 - 0s - loss: 1.1003 - accuracy: 0.3288 - val_loss: 1.0985 - val_accuracy: 0.3420 - 356ms/epoch - 445us/step
-Epoch 9/50
-800/800 - 0s - loss: 1.0994 - accuracy: 0.3347 - val_loss: 1.0986 - val_accuracy: 0.3360 - 355ms/epoch - 444us/step
-Epoch 10/50
-800/800 - 0s - loss: 1.0991 - accuracy: 0.3388 - val_loss: 1.0986 - val_accuracy: 0.3400 - 361ms/epoch - 451us/step
-Epoch 11/50
-800/800 - 0s - loss: 1.1002 - accuracy: 0.3305 - val_loss: 1.0987 - val_accuracy: 0.3240 - 356ms/epoch - 445us/step
-Epoch 12/50
-800/800 - 0s - loss: 1.0992 - accuracy: 0.3295 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step
-Epoch 13/50
-800/800 - 0s - loss: 1.0994 - accuracy: 0.3332 - val_loss: 1.0988 - val_accuracy: 0.3420 - 360ms/epoch - 450us/step
-Epoch 14/50
-800/800 - 0s - loss: 1.0996 - accuracy: 0.3228 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 15/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3290 - val_loss: 1.0987 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step
-Epoch 16/50
-800/800 - 0s - loss: 1.0992 - accuracy: 0.3325 - val_loss: 1.0988 - val_accuracy: 0.3250 - 360ms/epoch - 450us/step
-Epoch 17/50
-800/800 - 0s - loss: 1.0998 - accuracy: 0.3325 - val_loss: 1.0989 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step
-Epoch 18/50
-800/800 - 0s - loss: 1.0996 - accuracy: 0.3200 - val_loss: 1.0987 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step
-Epoch 19/50
-800/800 - 0s - loss: 1.0990 - accuracy: 0.3307 - val_loss: 1.0986 - val_accuracy: 0.3240 - 359ms/epoch - 449us/step
-Epoch 20/50
-800/800 - 0s - loss: 1.0990 - accuracy: 0.3380 - val_loss: 1.0986 - val_accuracy: 0.3320 - 353ms/epoch - 442us/step
-Epoch 21/50
-800/800 - 0s - loss: 1.0988 - accuracy: 0.3282 - val_loss: 1.0987 - val_accuracy: 0.3210 - 355ms/epoch - 443us/step
-Epoch 22/50
-800/800 - 0s - loss: 1.1003 - accuracy: 0.3335 - val_loss: 1.0986 - val_accuracy: 0.3360 - 353ms/epoch - 441us/step
-Epoch 23/50
-800/800 - 0s - loss: 1.0994 - accuracy: 0.3343 - val_loss: 1.0986 - val_accuracy: 0.3440 - 356ms/epoch - 445us/step
-Epoch 24/50
-800/800 - 0s - loss: 1.0988 - accuracy: 0.3383 - val_loss: 1.0989 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step
-Epoch 25/50
-800/800 - 0s - loss: 1.0983 - accuracy: 0.3420 - val_loss: 1.0989 - val_accuracy: 0.3250 - 352ms/epoch - 440us/step
-Epoch 26/50
-800/800 - 0s - loss: 1.0990 - accuracy: 0.3347 - val_loss: 1.0989 - val_accuracy: 0.3250 - 357ms/epoch - 447us/step
-Epoch 27/50
-800/800 - 0s - loss: 1.0995 - accuracy: 0.3205 - val_loss: 1.0986 - val_accuracy: 0.3440 - 352ms/epoch - 440us/step
-Epoch 28/50
-800/800 - 0s - loss: 1.0991 - accuracy: 0.3207 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 29/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3335 - val_loss: 1.0988 - val_accuracy: 0.3250 - 358ms/epoch - 447us/step
-Epoch 30/50
-800/800 - 0s - loss: 1.0995 - accuracy: 0.3307 - val_loss: 1.0990 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 31/50
-800/800 - 0s - loss: 1.0993 - accuracy: 0.3405 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 32/50
-800/800 - 0s - loss: 1.0990 - accuracy: 0.3343 - val_loss: 1.0988 - val_accuracy: 0.3250 - 355ms/epoch - 444us/step
-Epoch 33/50
-800/800 - 0s - loss: 1.0987 - accuracy: 0.3368 - val_loss: 1.0987 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step
-Epoch 34/50
-800/800 - 0s - loss: 1.0990 - accuracy: 0.3230 - val_loss: 1.0988 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step
-Epoch 35/50
-800/800 - 0s - loss: 1.0985 - accuracy: 0.3380 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 445us/step
-Epoch 36/50
-800/800 - 0s - loss: 1.0991 - accuracy: 0.3275 - val_loss: 1.0987 - val_accuracy: 0.3250 - 352ms/epoch - 441us/step
-Epoch 37/50
-800/800 - 0s - loss: 1.0987 - accuracy: 0.3385 - val_loss: 1.0986 - val_accuracy: 0.3250 - 357ms/epoch - 446us/step
-Epoch 38/50
-800/800 - 0s - loss: 1.0992 - accuracy: 0.3388 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 444us/step
-Epoch 39/50
-800/800 - 0s - loss: 1.0998 - accuracy: 0.3265 - val_loss: 1.0987 - val_accuracy: 0.3250 - 356ms/epoch - 445us/step
-Epoch 40/50
-800/800 - 0s - loss: 1.0992 - accuracy: 0.3262 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 41/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3275 - val_loss: 1.0986 - val_accuracy: 0.3250 - 354ms/epoch - 442us/step
-Epoch 42/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3375 - val_loss: 1.0985 - val_accuracy: 0.3440 - 355ms/epoch - 444us/step
-Epoch 43/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3265 - val_loss: 1.0987 - val_accuracy: 0.3250 - 352ms/epoch - 440us/step
-Epoch 44/50
-800/800 - 0s - loss: 1.0994 - accuracy: 0.3295 - val_loss: 1.0986 - val_accuracy: 0.3440 - 353ms/epoch - 441us/step
-Epoch 45/50
-800/800 - 0s - loss: 1.0987 - accuracy: 0.3245 - val_loss: 1.0986 - val_accuracy: 0.3440 - 354ms/epoch - 443us/step
-Epoch 46/50
-800/800 - 0s - loss: 1.0987 - accuracy: 0.3167 - val_loss: 1.0987 - val_accuracy: 0.3250 - 409ms/epoch - 512us/step
-Epoch 47/50
-800/800 - 0s - loss: 1.0989 - accuracy: 0.3330 - val_loss: 1.0986 - val_accuracy: 0.3250 - 367ms/epoch - 459us/step
-Epoch 48/50
-800/800 - 0s - loss: 1.0996 - accuracy: 0.3185 - val_loss: 1.0987 - val_accuracy: 0.3250 - 360ms/epoch - 450us/step
-Epoch 49/50
-800/800 - 0s - loss: 1.0988 - accuracy: 0.3330 - val_loss: 1.0988 - val_accuracy: 0.3250 - 354ms/epoch - 443us/step
-Epoch 50/50
-800/800 - 0s - loss: 1.0992 - accuracy: 0.3257 - val_loss: 1.0987 - val_accuracy: 0.3250 - 353ms/epoch - 441us/step</code></pre>
+<pre><code>Epoch 1/30
+800/800 - 1s - loss: 0.3835 - accuracy: 0.8947 - val_loss: 0.2465 - val_accuracy: 0.9010 - 718ms/epoch - 898us/step
+Epoch 2/30
+800/800 - 0s - loss: 0.2644 - accuracy: 0.9050 - val_loss: 0.1695 - val_accuracy: 0.9010 - 374ms/epoch - 467us/step
+Epoch 3/30
+800/800 - 0s - loss: 0.1931 - accuracy: 0.9118 - val_loss: 0.1397 - val_accuracy: 0.9600 - 360ms/epoch - 450us/step
+Epoch 4/30
+800/800 - 0s - loss: 0.1630 - accuracy: 0.9298 - val_loss: 0.1065 - val_accuracy: 0.9780 - 360ms/epoch - 450us/step
+Epoch 5/30
+800/800 - 0s - loss: 0.1545 - accuracy: 0.9340 - val_loss: 0.0983 - val_accuracy: 0.9720 - 363ms/epoch - 454us/step
+Epoch 6/30
+800/800 - 0s - loss: 0.1336 - accuracy: 0.9465 - val_loss: 0.0823 - val_accuracy: 0.9720 - 362ms/epoch - 452us/step
+Epoch 7/30
+800/800 - 0s - loss: 0.1284 - accuracy: 0.9500 - val_loss: 0.0640 - val_accuracy: 0.9850 - 362ms/epoch - 452us/step
+Epoch 8/30
+800/800 - 0s - loss: 0.1280 - accuracy: 0.9538 - val_loss: 0.0792 - val_accuracy: 0.9740 - 359ms/epoch - 449us/step
+Epoch 9/30
+800/800 - 0s - loss: 0.1203 - accuracy: 0.9563 - val_loss: 0.0691 - val_accuracy: 0.9840 - 361ms/epoch - 452us/step
+Epoch 10/30
+800/800 - 0s - loss: 0.1220 - accuracy: 0.9580 - val_loss: 0.0761 - val_accuracy: 0.9780 - 359ms/epoch - 449us/step
+Epoch 11/30
+800/800 - 0s - loss: 0.1143 - accuracy: 0.9615 - val_loss: 0.0757 - val_accuracy: 0.9810 - 360ms/epoch - 449us/step
+Epoch 12/30
+800/800 - 0s - loss: 0.1106 - accuracy: 0.9592 - val_loss: 0.0665 - val_accuracy: 0.9860 - 361ms/epoch - 452us/step
+Epoch 13/30
+800/800 - 0s - loss: 0.1155 - accuracy: 0.9610 - val_loss: 0.0732 - val_accuracy: 0.9790 - 358ms/epoch - 448us/step
+Epoch 14/30
+800/800 - 0s - loss: 0.1004 - accuracy: 0.9647 - val_loss: 0.0709 - val_accuracy: 0.9770 - 357ms/epoch - 446us/step
+Epoch 15/30
+800/800 - 0s - loss: 0.1028 - accuracy: 0.9607 - val_loss: 0.0793 - val_accuracy: 0.9840 - 361ms/epoch - 451us/step
+Epoch 16/30
+800/800 - 0s - loss: 0.1081 - accuracy: 0.9632 - val_loss: 0.0889 - val_accuracy: 0.9760 - 359ms/epoch - 449us/step
+Epoch 17/30
+800/800 - 0s - loss: 0.1037 - accuracy: 0.9668 - val_loss: 0.0703 - val_accuracy: 0.9850 - 358ms/epoch - 448us/step
+Epoch 18/30
+800/800 - 0s - loss: 0.0953 - accuracy: 0.9668 - val_loss: 0.0833 - val_accuracy: 0.9770 - 362ms/epoch - 453us/step
+Epoch 19/30
+800/800 - 0s - loss: 0.0989 - accuracy: 0.9668 - val_loss: 0.0822 - val_accuracy: 0.9800 - 360ms/epoch - 450us/step
+Epoch 20/30
+800/800 - 0s - loss: 0.1009 - accuracy: 0.9615 - val_loss: 0.0627 - val_accuracy: 0.9860 - 359ms/epoch - 448us/step
+Epoch 21/30
+800/800 - 0s - loss: 0.0942 - accuracy: 0.9650 - val_loss: 0.0827 - val_accuracy: 0.9790 - 357ms/epoch - 446us/step
+Epoch 22/30
+800/800 - 0s - loss: 0.0941 - accuracy: 0.9645 - val_loss: 0.0699 - val_accuracy: 0.9860 - 362ms/epoch - 453us/step
+Epoch 23/30
+800/800 - 0s - loss: 0.0913 - accuracy: 0.9653 - val_loss: 0.0669 - val_accuracy: 0.9840 - 358ms/epoch - 448us/step
+Epoch 24/30
+800/800 - 0s - loss: 0.0917 - accuracy: 0.9645 - val_loss: 0.0625 - val_accuracy: 0.9870 - 358ms/epoch - 447us/step
+Epoch 25/30
+800/800 - 0s - loss: 0.0931 - accuracy: 0.9630 - val_loss: 0.0666 - val_accuracy: 0.9880 - 362ms/epoch - 452us/step
+Epoch 26/30
+800/800 - 0s - loss: 0.0874 - accuracy: 0.9680 - val_loss: 0.0721 - val_accuracy: 0.9840 - 359ms/epoch - 449us/step
+Epoch 27/30
+800/800 - 0s - loss: 0.0940 - accuracy: 0.9660 - val_loss: 0.0578 - val_accuracy: 0.9870 - 359ms/epoch - 449us/step
+Epoch 28/30
+800/800 - 0s - loss: 0.0798 - accuracy: 0.9657 - val_loss: 0.0591 - val_accuracy: 0.9870 - 361ms/epoch - 451us/step
+Epoch 29/30
+800/800 - 0s - loss: 0.0834 - accuracy: 0.9705 - val_loss: 0.0777 - val_accuracy: 0.9800 - 357ms/epoch - 447us/step
+Epoch 30/30
+800/800 - 0s - loss: 0.0954 - accuracy: 0.9705 - val_loss: 0.0604 - val_accuracy: 0.9870 - 368ms/epoch - 461us/step</code></pre>
 </div>
 </div>
 </section>
@@ -347,11 +322,11 @@ Epoch 50/50
 <h2 class="anchored" data-anchor-id="performance-evaluation"><strong>Performance Evaluation</strong></h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>32/32 - 0s - loss: 1.0987 - accuracy: 0.3250 - 56ms/epoch - 2ms/step</code></pre>
+<pre><code>32/32 - 0s - loss: 0.0604 - accuracy: 0.9870 - 53ms/epoch - 2ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    loss accuracy 
-  1.0987   0.3250 </code></pre>
+<pre><code>      loss   accuracy 
+0.06036564 0.98699999 </code></pre>
 </div>
 </div>
 </section>
@@ -359,37 +334,115 @@ Epoch 50/50
 <h2 class="anchored" data-anchor-id="insights-and-application"><strong>Insights and Application</strong></h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>32/32 - 0s - 41ms/epoch - 1ms/step</code></pre>
+<pre><code>32/32 - 0s - 39ms/epoch - 1ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-  [38] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-  [75] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [149] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [186] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [223] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [260] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [297] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [334] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [371] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [408] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [445] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [482] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [519] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [556] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [593] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [630] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [667] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [704] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [741] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [778] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [815] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [852] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [889] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [926] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
- [963] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-[1000] 2</code></pre>
+<pre><code>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+  [1,]    0    0    0    0    0    0    0    0    0     0
+  [2,]    1    0    0    0    0    0    0    0    0     0
+  [3,]    0    0    0    0    0    0    0    0    0     0
+  [4,]    0    0    0    1    0    0    1    0    0     0
+  [5,]    0    0    0    0    1    0    0    0    0     0
+  [6,]    0    0    0    0    0    0    0    0    0     1
+  [7,]    0    0    0    0    0    0    0    0    0     0
+  [8,]    0    0    0    0    0    1    0    0    0     0
+  [9,]    1    0    0    1    0    0    0    0    0     0
+ [10,]    0    0    0    0    0    0    0    0    0     0
+ [11,]    0    0    1    0    0    0    0    0    0     0
+ [12,]    0    0    0    0    0    1    0    0    0     0
+ [13,]    0    1    0    0    0    0    0    0    0     0
+ [14,]    0    0    0    0    1    0    0    0    0     0
+ [15,]    0    1    0    0    0    0    0    0    0     0
+ [16,]    0    0    0    1    0    0    0    0    1     0
+ [17,]    0    1    0    0    0    0    0    0    0     0
+ [18,]    0    0    0    0    1    0    0    0    0     0
+ [19,]    0    1    0    0    0    0    0    0    0     0
+ [20,]    0    0    0    0    0    0    0    0    0     0
+ [21,]    0    0    0    0    0    0    0    0    1     0
+ [22,]    0    0    0    0    0    0    0    0    0     0
+ [23,]    0    0    1    0    0    1    0    0    1     0
+ [24,]    1    0    0    0    0    0    0    0    0     0
+ [25,]    0    0    1    0    1    0    0    0    0     0
+ [26,]    0    0    0    0    0    0    0    0    0     0
+ [27,]    0    0    0    0    0    0    0    0    0     0
+ [28,]    0    0    0    0    0    0    0    0    0     0
+ [29,]    0    0    1    0    0    0    0    0    0     1
+ [30,]    0    0    1    0    1    0    0    0    1     0
+ [31,]    0    1    0    1    1    0    0    0    0     0
+ [32,]    0    0    0    0    0    0    0    0    0     0
+ [33,]    1    0    0    0    0    0    1    0    0     0
+ [34,]    0    0    0    0    1    0    0    0    0     0
+ [35,]    1    0    0    0    0    1    0    0    0     0
+ [36,]    0    0    0    0    0    0    0    0    1     0
+ [37,]    0    0    0    0    0    0    1    1    0     0
+ [38,]    0    0    0    0    0    0    0    0    0     0
+ [39,]    1    0    0    1    0    0    0    0    0     0
+ [40,]    0    0    0    0    0    0    0    0    0     0
+ [41,]    1    0    0    0    0    0    0    0    1     0
+ [42,]    0    0    0    1    0    0    0    1    0     1
+ [43,]    0    0    0    0    0    0    0    0    0     0
+ [44,]    1    0    0    0    0    0    0    0    0     0
+ [45,]    1    0    0    0    1    0    1    0    0     0
+ [46,]    1    0    0    0    0    0    0    0    0     0
+ [47,]    0    0    1    0    0    0    0    0    0     0
+ [48,]    0    0    0    0    0    0    0    0    0     0
+ [49,]    0    1    0    1    0    0    0    0    0     0
+ [50,]    0    0    0    0    0    0    0    0    0     0
+ [51,]    0    0    0    1    0    0    0    0    0     1
+ [52,]    0    0    0    0    0    0    0    0    0     0
+ [53,]    0    0    0    0    0    0    0    0    0     0
+ [54,]    0    0    0    0    0    0    0    0    0     0
+ [55,]    1    0    0    1    0    0    0    0    0     1
+ [56,]    0    0    0    0    0    0    0    0    0     0
+ [57,]    0    0    1    0    1    0    0    0    0     0
+ [58,]    0    0    0    0    0    0    1    0    0     0
+ [59,]    0    0    1    0    0    0    0    0    0     0
+ [60,]    0    0    0    0    0    0    0    0    0     0
+ [61,]    0    0    1    0    0    0    0    0    0     0
+ [62,]    0    0    1    0    0    0    0    0    0     0
+ [63,]    0    0    0    0    0    0    0    0    0     0
+ [64,]    0    0    0    1    0    0    0    0    0     0
+ [65,]    0    0    0    0    1    0    0    0    0     1
+ [66,]    0    0    0    0    0    0    0    0    1     0
+ [67,]    0    0    0    0    0    0    0    0    0     0
+ [68,]    0    0    0    0    0    0    0    0    0     0
+ [69,]    0    0    0    0    0    1    0    1    0     0
+ [70,]    0    0    0    0    0    0    0    0    0     0
+ [71,]    0    0    0    0    0    0    0    0    0     0
+ [72,]    0    0    1    0    0    1    0    0    0     0
+ [73,]    0    0    1    0    0    0    0    0    0     0
+ [74,]    0    0    0    0    0    0    0    0    0     0
+ [75,]    0    0    0    0    0    0    0    0    0     0
+ [76,]    0    0    0    0    0    0    0    0    0     0
+ [77,]    0    0    0    0    0    0    0    0    0     0
+ [78,]    0    1    0    0    0    0    0    0    0     0
+ [79,]    0    0    0    0    1    0    0    0    1     0
+ [80,]    0    0    0    0    1    0    0    0    0     0
+ [81,]    0    0    0    0    0    0    1    0    0     0
+ [82,]    0    0    0    0    0    0    0    0    0     0
+ [83,]    0    0    1    0    0    0    0    0    0     1
+ [84,]    0    0    0    0    1    0    0    0    0     0
+ [85,]    0    0    1    0    0    0    0    0    0     0
+ [86,]    0    0    0    0    0    0    1    0    0     0
+ [87,]    0    0    0    0    1    0    0    0    1     0
+ [88,]    0    0    0    0    0    0    0    0    0     0
+ [89,]    0    0    0    0    0    0    0    0    0     0
+ [90,]    1    0    0    0    0    0    0    0    0     0
+ [91,]    0    0    0    0    0    0    0    0    0     0
+ [92,]    0    0    0    0    0    0    0    0    0     1
+ [93,]    0    0    0    0    0    0    0    0    0     0
+ [94,]    0    0    1    0    0    0    0    1    0     0
+ [95,]    0    0    0    0    0    0    0    0    1     0
+ [96,]    0    0    0    0    0    0    0    1    0     0
+ [97,]    1    0    0    0    0    0    0    0    0     0
+ [98,]    0    0    0    0    0    1    0    0    0     0
+ [99,]    0    0    0    1    0    0    0    0    0     0
+[100,]    0    0    0    1    0    0    0    0    0     0</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>prop_of_loan_approvals
+  0   1 
+902  98 </code></pre>
 </div>
 </div>
 

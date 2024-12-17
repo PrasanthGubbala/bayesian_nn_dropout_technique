@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dropout Dynamics">
-<meta name="description" content="This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model’s generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being.">
+<meta name="description" content="This project aims to predict the likelihood of a loan applicant being approved or denied using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model’s generalization and estimate prediction uncertainty. The model will be trained on a dataset of 5,000 loan applications, incorporating factors such as age, income, credit score, years of experience, and mortgage value. The project explores how effectively a neural network can predict loan approval based on applicant metadata and the impact of dropout regularization on model performance. Ultimately, this model aims to provide a more reliable and robust decision-making tool for financial institutions.">
 
 <title>Bayesian Neural Networks - Regularization of Bayesian NN</title>
 <style>
@@ -4760,7 +4760,7 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#dataset-description" id="toc-dataset-description" class="nav-link" data-scroll-target="#dataset-description">Dataset Description</a></li>
   </ul></li>
-  <li><a href="#priors---parameters-hyperparameters" id="toc-priors---parameters-hyperparameters" class="nav-link" data-scroll-target="#priors---parameters-hyperparameters">Priors - Parameters &amp; Hyperparameters</a></li>
+  <li><a href="#priors---parameters-hyperparameters" id="toc-priors---parameters-hyperparameters" class="nav-link" data-scroll-target="#priors---parameters-hyperparameters"><strong>Priors - Parameters &amp; Hyperparameters:</strong></a></li>
   </ul>
 </nav>
     </div>
@@ -4775,7 +4775,7 @@ vertical-align: -.125em;
 
 <div>
   <div class="description">
-    This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model’s generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being.
+    This project aims to predict the likelihood of a loan applicant being approved or denied using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model’s generalization and estimate prediction uncertainty. The model will be trained on a dataset of 5,000 loan applications, incorporating factors such as age, income, credit score, years of experience, and mortgage value. The project explores how effectively a neural network can predict loan approval based on applicant metadata and the impact of dropout regularization on model performance. Ultimately, this model aims to provide a more reliable and robust decision-making tool for financial institutions.
   </div>
 </div>
 
@@ -4807,163 +4807,132 @@ vertical-align: -.125em;
 
 <section id="project-goal" class="level2">
 <h2 class="anchored" data-anchor-id="project-goal">Project Goal</h2>
-<p>Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be.</p>
+<p>The goal of this project is to develop a Bayesian Neural Network, enhanced with the Monte Carlo Dropout regularization technique, to accurately predict the likelihood of a loan applicant being approved or denied. The model will be trained on a dataset containing applicant metadata—such as age, income, credit score, years of experience, and mortgage value—and will predict whether the applicant is likely to be approved for a loan. By using dropout during both training and inference, we aim to improve the model’s generalization and estimate prediction uncertainty, ultimately providing a more reliable decision-making tool for financial institutions.</p>
 </section>
 <section id="questions" class="level2">
 <h2 class="anchored" data-anchor-id="questions">Questions</h2>
 <ol type="1">
-<li><p>How effectively can a neural network predict employee stress levels worldwide using specific individual and career-related metadata?</p></li>
-<li><p>How does the dropout technique impact the performance and optimization of a neural network in predicting stress levels?</p></li>
+<li><p>How effectively can a neural network predict whether a loan applicant will be approved or denied based on individual financial and demographic metadata?</p></li>
+<li><p>How does the Monte Carlo Dropout technique impact the performance and generalization of a neural network in predicting loan approval outcomes?</p></li>
 </ol>
 </section>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Set the path to the CSV file</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>dataset_path <span class="ot">&lt;-</span> <span class="st">&quot;data/Impact_of_Remote_Work_on_Mental_Health.csv&quot;</span>  <span class="co"># Adjust this to the actual path</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Load the dataset into a dataframe</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(dataset_path)</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co"># Preview the dataset</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Load the necessary libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Load the data</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/bankloan.csv&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Review all predictors</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  Employee_ID Age     Gender          Job_Role   Industry Years_of_Experience
-1     EMP0001  32 Non-binary                HR Healthcare                  13
-2     EMP0002  40     Female    Data Scientist         IT                   3
-3     EMP0003  59 Non-binary Software Engineer  Education                  22
-4     EMP0004  27       Male Software Engineer    Finance                  20
-5     EMP0005  49       Male             Sales Consulting                  32
-6     EMP0006  59 Non-binary             Sales         IT                  31
-  Work_Location Hours_Worked_Per_Week Number_of_Virtual_Meetings
-1        Hybrid                    47                          7
-2        Remote                    52                          4
-3        Hybrid                    46                         11
-4        Onsite                    32                          8
-5        Onsite                    35                         12
-6        Hybrid                    39                          3
-  Work_Life_Balance_Rating Stress_Level Mental_Health_Condition
-1                        2       Medium              Depression
-2                        1       Medium                 Anxiety
-3                        5       Medium                 Anxiety
-4                        4         High              Depression
-5                        2         High                    None
-6                        4         High                    None
-  Access_to_Mental_Health_Resources Productivity_Change Social_Isolation_Rating
-1                                No            Decrease                       1
-2                                No            Increase                       3
-3                                No           No Change                       4
-4                               Yes            Increase                       3
-5                               Yes            Decrease                       3
-6                                No            Increase                       5
-  Satisfaction_with_Remote_Work Company_Support_for_Remote_Work
-1                   Unsatisfied                               1
-2                     Satisfied                               2
-3                   Unsatisfied                               5
-4                   Unsatisfied                               3
-5                   Unsatisfied                               3
-6                   Unsatisfied                               1
-  Physical_Activity Sleep_Quality        Region
-1            Weekly          Good        Europe
-2            Weekly          Good          Asia
-3              None          Poor North America
-4              None          Poor        Europe
-5            Weekly       Average North America
-6              None       Average South America</code></pre>
+<pre><code>      Age          Experience       Income           Family     
+ Min.   :23.00   Min.   :-3.0   Min.   :  8.00   Min.   :1.000  
+ 1st Qu.:35.00   1st Qu.:10.0   1st Qu.: 39.00   1st Qu.:1.000  
+ Median :45.00   Median :20.0   Median : 64.00   Median :2.000  
+ Mean   :45.34   Mean   :20.1   Mean   : 73.77   Mean   :2.396  
+ 3rd Qu.:55.00   3rd Qu.:30.0   3rd Qu.: 98.00   3rd Qu.:3.000  
+ Max.   :67.00   Max.   :43.0   Max.   :224.00   Max.   :4.000  
+     CCAvg          Education        Mortgage     Personal.Loan  
+ Min.   : 0.000   Min.   :1.000   Min.   :  0.0   Min.   :0.000  
+ 1st Qu.: 0.700   1st Qu.:1.000   1st Qu.:  0.0   1st Qu.:0.000  
+ Median : 1.500   Median :2.000   Median :  0.0   Median :0.000  
+ Mean   : 1.938   Mean   :1.881   Mean   : 56.5   Mean   :0.096  
+ 3rd Qu.: 2.500   3rd Qu.:3.000   3rd Qu.:101.0   3rd Qu.:0.000  
+ Max.   :10.000   Max.   :3.000   Max.   :635.0   Max.   :1.000  
+ Securities.Account   CD.Account         Online         CreditCard   
+ Min.   :0.0000     Min.   :0.0000   Min.   :0.0000   Min.   :0.000  
+ 1st Qu.:0.0000     1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.000  
+ Median :0.0000     Median :0.0000   Median :1.0000   Median :0.000  
+ Mean   :0.1044     Mean   :0.0604   Mean   :0.5968   Mean   :0.294  
+ 3rd Qu.:0.0000     3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:1.000  
+ Max.   :1.0000     Max.   :1.0000   Max.   :1.0000   Max.   :1.000  </code></pre>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">summary</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> Employee_ID             Age        Gender            Job_Role        
- Length:5000        Min.   :22   Length:5000        Length:5000       
- Class :character   1st Qu.:31   Class :character   Class :character  
- Mode  :character   Median :41   Mode  :character   Mode  :character  
-                    Mean   :41                                        
-                    3rd Qu.:51                                        
-                    Max.   :60                                        
-   Industry         Years_of_Experience Work_Location     
- Length:5000        Min.   : 1.00       Length:5000       
- Class :character   1st Qu.: 9.00       Class :character  
- Mode  :character   Median :18.00       Mode  :character  
-                    Mean   :17.81                         
-                    3rd Qu.:26.00                         
-                    Max.   :35.00                         
- Hours_Worked_Per_Week Number_of_Virtual_Meetings Work_Life_Balance_Rating
- Min.   :20.00         Min.   : 0.000             Min.   :1.000           
- 1st Qu.:29.00         1st Qu.: 4.000             1st Qu.:2.000           
- Median :40.00         Median : 8.000             Median :3.000           
- Mean   :39.61         Mean   : 7.559             Mean   :2.984           
- 3rd Qu.:50.00         3rd Qu.:12.000             3rd Qu.:4.000           
- Max.   :60.00         Max.   :15.000             Max.   :5.000           
- Stress_Level       Mental_Health_Condition Access_to_Mental_Health_Resources
- Length:5000        Length:5000             Length:5000                      
- Class :character   Class :character        Class :character                 
- Mode  :character   Mode  :character        Mode  :character                 
-                                                                             
-                                                                             
-                                                                             
- Productivity_Change Social_Isolation_Rating Satisfaction_with_Remote_Work
- Length:5000         Min.   :1.000           Length:5000                  
- Class :character    1st Qu.:2.000           Class :character             
- Mode  :character    Median :3.000           Mode  :character             
-                     Mean   :2.994                                        
-                     3rd Qu.:4.000                                        
-                     Max.   :5.000                                        
- Company_Support_for_Remote_Work Physical_Activity  Sleep_Quality     
- Min.   :1.000                   Length:5000        Length:5000       
- 1st Qu.:2.000                   Class :character   Class :character  
- Median :3.000                   Mode  :character   Mode  :character  
- Mean   :3.008                                                        
- 3rd Qu.:4.000                                                        
- Max.   :5.000                                                        
-    Region         
- Length:5000       
- Class :character  
- Mode  :character  
-                   
-                   
-                   </code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Analyze Mortgage predictor</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># View mortgage $ data</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#range(df$Mortgage) # $0-$635</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Count the number of values greater than 0 in the Mortgage column</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#count_above_zero &lt;- sum(df$Mortgage &gt; 0, na.rm = TRUE)</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co"># Get the total number of non-missing values in the column</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#total_values &lt;- sum(!is.na(df$Mortgage))</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co"># Calculate the proportion</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#proportion_above_zero &lt;- count_above_zero / total_values</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co"># Print the results</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#count_above_zero # 1,538 ppl with mortgages</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#proportion_above_zero # 30.76% of people have loans</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co"># Remove Mortgage</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#df &lt;- select(df, -&quot;Mortgage&quot;)</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co"># Normalize using Min-Max Scaling</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co"># df &lt;- df %&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#   mutate(</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#     Age = (Age - min(Age)) / (max(Age) - min(Age)),</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#     Experience = (Experience - min(Experience)) / (max(Experience) - min(Experience)),</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#     Income = (Income - min(Income)) / (max(Income) - min(Income)),</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">#     CCAvg = (CCAvg - min(CCAvg)) / (max(CCAvg) - min(CCAvg)),</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#     Mortgage = (Mortgage - min(Mortgage, na.rm = TRUE)) / (max(Mortgage, na.rm = TRUE) - min(Mortgage, na.rm = TRUE))</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#   )</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co"># </span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co"># summary(df)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="dataset-description" class="level3">
 <h3 class="anchored" data-anchor-id="dataset-description">Dataset Description</h3>
-<p>This dataset contains information on <strong>5000 employees</strong> from various industries, focusing on demographics, work-related factors, and mental health. It includes <strong>20 variables</strong>, such as age, job role, work location, mental health condition, work-life balance, and productivity changes.</p>
+<p>This dataset consists of 5,000 loan applicants with 12 variables that capture demographic, financial, and credit-related factors. It includes information such as age, income, family size, credit score, employment status, and whether the applicant has certain financial accounts (e.g., a credit card or online banking). The target variable indicates whether a personal loan was approved (1) or denied (0).</p>
 <section id="dimensions" class="level4">
 <h4 class="anchored" data-anchor-id="dimensions"><strong>Dimensions</strong>:</h4>
 <ul>
 <li><strong>Rows</strong>: 5000 (employees)</li>
-<li><strong>Columns</strong>: 20 (attributes like Age, Gender, Job Role, etc.)</li>
+<li><strong>Columns</strong>: 12 variables that capture demographic, financial, etc.</li>
 </ul>
 </section>
 <section id="key-variables" class="level4">
 <h4 class="anchored" data-anchor-id="key-variables"><strong>Key Variables</strong>:</h4>
 <ul>
-<li><strong>Numerical</strong>: Age, Years of Experience, Hours Worked, Stress Level, Social Isolation, etc.</li>
-<li><strong>Categorical</strong>: Gender, Job Role, Work Location, Mental Health Condition, etc.</li>
+<li><strong>Numerical</strong>: Age, Income, Years of Experience, Credit Score, Mortgage, etc.</li>
+<li><strong>Categorical</strong>: Gender, Job Role, Family Size, Education, Personal Loan Status, etc.</li>
 </ul>
 </section>
 <section id="provenance" class="level4">
 <h4 class="anchored" data-anchor-id="provenance"><strong>Provenance</strong>:</h4>
-<p>The dataset appears synthetic, created for studying employee wellbeing, workplace dynamics, and productivity. It reflects common variables used in employee surveys or organizational studies.</p>
+<p>The dataset is synthetic, designed for research on employee wellbeing, workplace dynamics, and productivity, incorporating common variables seen in employee surveys.</p>
 </section>
 <section id="reason-for-choosing" class="level4">
 <h4 class="anchored" data-anchor-id="reason-for-choosing"><strong>Reason for Choosing</strong>:</h4>
-<p>This dataset is relevant for exploring the impact of work environments (remote, hybrid, onsite) on employee mental health, work-life balance, and productivity. It’s ideal for analyzing workplace wellbeing, stress, and diversity, making it valuable for HR and organizational research.</p>
+<p>It’s relevant for analyzing the impact of work environments (remote, hybrid, onsite) on mental health, work-life balance, and productivity, making it valuable for HR and organizational studies.</p>
 </section>
 </section>
 </section>
 <section id="priors---parameters-hyperparameters" class="level2">
-<h2 class="anchored" data-anchor-id="priors---parameters-hyperparameters">Priors - Parameters &amp; Hyperparameters</h2>
-<p>Since Gaussian distributions are smooth and differentiable and crucial for optimization in neural networks, we will use Gaussians as our priors, utilizing the parameters <strong>age</strong>, <strong>gender</strong>, <strong>industry</strong>, <strong>work location</strong>, and <strong>hours worked</strong> as main features. We will also explore the possibility of other parameters influencing the priors.</p>
-<p>Since we plan on using a basic feedforward neural network with a few layers, we need to set the values ( ) (mean) and ( ) (standard deviation) for the model parameters: the weights (( W_{ij} )) and biases (( b_j )).</p>
+<h2 class="anchored" data-anchor-id="priors---parameters-hyperparameters"><strong>Priors - Parameters &amp; Hyperparameters:</strong></h2>
+<p>For the model, Gaussian distributions are used for priors, aligning with the smoothness and differentiability needed for effective optimization. The key features influencing stress levels, such as age, job role, work location, mental health condition, and hours worked, will determine the priors.</p>
+<p><strong>Parameter Initialization:</strong></p>
 <ul>
-<li><p>The weights ( W_{ij} ) will tend to take on positive or negative values for ( ), and for the standard deviation ( ), we set:</p>
-<p>[ W_{ij} (0, 0.5) ]</p></li>
-<li><p>Since biases are often kept near 0 in basic feedforward neural networks, we have chosen ( ) and ( ) to reflect this:</p>
-<p>[ b_j (0, 0.1) ]</p></li>
+<li><p><strong>Weights (W_ij):</strong> The weights will be initialized using a Gaussian distribution with: Wij∼N(0,0.5)Wij​∼N(0,0.5)<br>
+where μ = 0 and σ = 0.5.</p></li>
+<li><p><strong>Biases (b_j):</strong> The biases will have a smaller variance to remain near zero: bj∼N(0,0.1)bj​∼N(0,0.1)<br>
+where μ = 0 and σ = 0.1.</p></li>
 </ul>
-<p>These parameters depend on the values we set for hyperparameters. For our initial test, we plan on using: - <strong>2 hidden layers</strong> - <strong>50 neurons per layer</strong> - <strong>ReLU activation</strong> for the hidden layers - <strong>Softmax function</strong> for the output layer - <strong>Dropout rate (p) of 0.3</strong>, since the model tends to overfit the data when ( p = 0.1 ) and also overfits when ( p = 0.5.</p>
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li><p><strong>Model Architecture:</strong> 4 hidden layers with 128, 64, 32, and 16 units, respectively.</p></li>
+<li><p><strong>Activation Functions:</strong> ReLU for hidden layers, Sigmoid for output layer.</p></li>
+<li><p><strong>Training Configuration:</strong></p>
+<ul>
+<li><p>Training data: 80%, Testing data: 20%</p></li>
+<li><p>Epochs: 30</p></li>
+<li><p>Batch Size: 5</p></li>
+<li><p>Loss Function: Binary Cross-Entropy</p></li>
+</ul></li>
+<li><p><strong>Optimization:</strong> Adam optimizer, known for its efficiency in handling complex, non-convex optimization problems like neural network training.</p></li>
+</ul>
 
 
 <!-- -->
@@ -5614,102 +5583,144 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> &quot;Regularization of Bayesian NN&quot;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="an">subtitle:</span><span class="co"> &quot;Proposal&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="an">author:</span><span class="co"> </span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">  - name: &quot;Dropout Dynamics&quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    affiliations:</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="co">      - name: &quot;College of Information Science, University of Arizona&quot;</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="an">description:</span><span class="co"> &quot;This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model&#39;s generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being.&quot;</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="an">format:</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="co">  html:</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="co">    code-tools: true</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="co">    code-overflow: wrap</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="an">editor:</span><span class="co"> visual</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="an">code-annotations:</span><span class="co"> hover</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="an">execute:</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="co">  warning: false</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="co">---</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a></span>
-<span id="cb5-23"><a href="#cb5-23"></a><span class="in">```{r}</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a><span class="co">#| label: load-packages</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a><span class="co">#| include: false</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a></span>
-<span id="cb5-27"><a href="#cb5-27"></a><span class="co"># Load packages here</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
-<span id="cb5-29"><a href="#cb5-29"></a><span class="in">```</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a></span>
-<span id="cb5-31"><a href="#cb5-31"></a><span class="fu">## Project Goal</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a></span>
-<span id="cb5-33"><a href="#cb5-33"></a>Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be.</span>
-<span id="cb5-34"><a href="#cb5-34"></a></span>
-<span id="cb5-35"><a href="#cb5-35"></a><span class="fu">## Questions</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a></span>
-<span id="cb5-37"><a href="#cb5-37"></a><span class="ss">1.  </span>How effectively can a neural network predict employee stress levels worldwide using specific individual and career-related metadata?</span>
-<span id="cb5-38"><a href="#cb5-38"></a></span>
-<span id="cb5-39"><a href="#cb5-39"></a><span class="ss">2.  </span>How does the dropout technique impact the performance and optimization of a neural network in predicting stress levels?</span>
-<span id="cb5-40"><a href="#cb5-40"></a></span>
-<span id="cb5-41"><a href="#cb5-41"></a><span class="fu">## Dataset</span></span>
-<span id="cb5-42"><a href="#cb5-42"></a></span>
-<span id="cb5-45"><a href="#cb5-45"></a><span class="in">```{r}</span></span>
-<span id="cb5-46"><a href="#cb5-46"></a><span class="co">#| label: load-dataset</span></span>
-<span id="cb5-47"><a href="#cb5-47"></a><span class="co">#| message: false</span></span>
-<span id="cb5-48"><a href="#cb5-48"></a></span>
-<span id="cb5-49"><a href="#cb5-49"></a><span class="co"># Set the path to the CSV file</span></span>
-<span id="cb5-50"><a href="#cb5-50"></a>dataset_path <span class="ot">&lt;-</span> <span class="st">&quot;data/Impact_of_Remote_Work_on_Mental_Health.csv&quot;</span>  <span class="co"># Adjust this to the actual path</span></span>
-<span id="cb5-51"><a href="#cb5-51"></a></span>
-<span id="cb5-52"><a href="#cb5-52"></a><span class="co"># Load the dataset into a dataframe</span></span>
-<span id="cb5-53"><a href="#cb5-53"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(dataset_path)</span>
-<span id="cb5-54"><a href="#cb5-54"></a></span>
-<span id="cb5-55"><a href="#cb5-55"></a><span class="co"># Preview the dataset</span></span>
-<span id="cb5-56"><a href="#cb5-56"></a><span class="fu">head</span>(data)</span>
-<span id="cb5-57"><a href="#cb5-57"></a></span>
-<span id="cb5-58"><a href="#cb5-58"></a><span class="in">```</span></span>
-<span id="cb5-59"><a href="#cb5-59"></a></span>
-<span id="cb5-62"><a href="#cb5-62"></a><span class="in">```{r}</span></span>
-<span id="cb5-63"><a href="#cb5-63"></a><span class="fu">summary</span>(data)</span>
-<span id="cb5-64"><a href="#cb5-64"></a><span class="in">```</span></span>
-<span id="cb5-65"><a href="#cb5-65"></a></span>
-<span id="cb5-66"><a href="#cb5-66"></a><span class="fu">### Dataset Description</span></span>
-<span id="cb5-67"><a href="#cb5-67"></a></span>
-<span id="cb5-68"><a href="#cb5-68"></a>This dataset contains information on **5000 employees** from various industries, focusing on demographics, work-related factors, and mental health. It includes **20 variables**, such as age, job role, work location, mental health condition, work-life balance, and productivity changes.</span>
-<span id="cb5-69"><a href="#cb5-69"></a></span>
-<span id="cb5-70"><a href="#cb5-70"></a><span class="fu">#### **Dimensions**:</span></span>
-<span id="cb5-71"><a href="#cb5-71"></a></span>
-<span id="cb5-72"><a href="#cb5-72"></a><span class="ss">-   </span>**Rows**: 5000 (employees)</span>
-<span id="cb5-73"><a href="#cb5-73"></a><span class="ss">-   </span>**Columns**: 20 (attributes like Age, Gender, Job Role, etc.)</span>
-<span id="cb5-74"><a href="#cb5-74"></a></span>
-<span id="cb5-75"><a href="#cb5-75"></a><span class="fu">#### **Key Variables**:</span></span>
-<span id="cb5-76"><a href="#cb5-76"></a></span>
-<span id="cb5-77"><a href="#cb5-77"></a><span class="ss">-   </span>**Numerical**: Age, Years of Experience, Hours Worked, Stress Level, Social Isolation, etc.</span>
-<span id="cb5-78"><a href="#cb5-78"></a><span class="ss">-   </span>**Categorical**: Gender, Job Role, Work Location, Mental Health Condition, etc.</span>
-<span id="cb5-79"><a href="#cb5-79"></a></span>
-<span id="cb5-80"><a href="#cb5-80"></a><span class="fu">#### **Provenance**:</span></span>
-<span id="cb5-81"><a href="#cb5-81"></a></span>
-<span id="cb5-82"><a href="#cb5-82"></a>The dataset appears synthetic, created for studying employee wellbeing, workplace dynamics, and productivity. It reflects common variables used in employee surveys or organizational studies.</span>
-<span id="cb5-83"><a href="#cb5-83"></a></span>
-<span id="cb5-84"><a href="#cb5-84"></a><span class="fu">#### **Reason for Choosing**:</span></span>
-<span id="cb5-85"><a href="#cb5-85"></a></span>
-<span id="cb5-86"><a href="#cb5-86"></a>This dataset is relevant for exploring the impact of work environments (remote, hybrid, onsite) on employee mental health, work-life balance, and productivity. It’s ideal for analyzing workplace wellbeing, stress, and diversity, making it valuable for HR and organizational research.</span>
-<span id="cb5-87"><a href="#cb5-87"></a></span>
-<span id="cb5-88"><a href="#cb5-88"></a><span class="fu">## Priors - Parameters &amp; Hyperparameters</span></span>
-<span id="cb5-89"><a href="#cb5-89"></a></span>
-<span id="cb5-90"><a href="#cb5-90"></a>Since Gaussian distributions are smooth and differentiable and crucial for optimization in neural networks, we will use Gaussians as our priors, utilizing the parameters **age**, **gender**, **industry**, **work location**, and **hours worked** as main features. We will also explore the possibility of other parameters influencing the priors.</span>
-<span id="cb5-91"><a href="#cb5-91"></a></span>
-<span id="cb5-92"><a href="#cb5-92"></a>Since we plan on using a basic feedforward neural network with a few layers, we need to set the values ( \mu ) (mean) and ( \sigma ) (standard deviation) for the model parameters: the weights (( W<span class="sc">\_</span>{ij} )) and biases (( b_j )).</span>
-<span id="cb5-93"><a href="#cb5-93"></a></span>
-<span id="cb5-94"><a href="#cb5-94"></a><span class="ss">-   </span>The weights ( W<span class="sc">\_</span>{ij} ) will tend to take on positive or negative values for ( \mu ), and for the standard deviation ( \sigma ), we set:</span>
-<span id="cb5-95"><a href="#cb5-95"></a></span>
-<span id="cb5-96"><a href="#cb5-96"></a>    <span class="sc">\[</span> W<span class="sc">\_</span>{ij} \sim \mathcal{N}(0, 0.5) <span class="sc">\]</span></span>
-<span id="cb5-97"><a href="#cb5-97"></a></span>
-<span id="cb5-98"><a href="#cb5-98"></a><span class="ss">-   </span>Since biases are often kept near 0 in basic feedforward neural networks, we have chosen ( \mu ) and ( \sigma ) to reflect this:</span>
-<span id="cb5-99"><a href="#cb5-99"></a></span>
-<span id="cb5-100"><a href="#cb5-100"></a>    <span class="sc">\[</span> b_j \sim \mathcal{N}(0, 0.1) <span class="sc">\]</span></span>
-<span id="cb5-101"><a href="#cb5-101"></a></span>
-<span id="cb5-102"><a href="#cb5-102"></a>These parameters depend on the values we set for hyperparameters. For our initial test, we plan on using: - **2 hidden layers** - **50 neurons per layer** - **ReLU activation** for the hidden layers - **Softmax function** for the output layer - **Dropout rate (p) of 0.3**, since the model tends to overfit the data when ( p = 0.1 ) and also overfits when ( p = 0.5.</span>
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> &quot;Regularization of Bayesian NN&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="an">subtitle:</span><span class="co"> &quot;Proposal&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">author:</span><span class="co"> </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">  - name: &quot;Dropout Dynamics&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">    affiliations:</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">      - name: &quot;College of Information Science, University of Arizona&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="an">description:</span><span class="co"> &quot;This project aims to predict the likelihood of a loan applicant being approved or denied using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model&#39;s generalization and estimate prediction uncertainty. The model will be trained on a dataset of 5,000 loan applications, incorporating factors such as age, income, credit score, years of experience, and mortgage value. The project explores how effectively a neural network can predict loan approval based on applicant metadata and the impact of dropout regularization on model performance. Ultimately, this model aims to provide a more reliable and robust decision-making tool for financial institutions.&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="an">format:</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">  html:</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">    code-overflow: wrap</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="an">editor:</span><span class="co"> visual</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="an">code-annotations:</span><span class="co"> hover</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="an">execute:</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">  warning: false</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">---</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="in">```{r}</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#| label: load-packages</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#| include: false</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co"># Load packages here</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="in">```</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="fu">## Project Goal</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a>The goal of this project is to develop a Bayesian Neural Network, enhanced with the Monte Carlo Dropout regularization technique, to accurately predict the likelihood of a loan applicant being approved or denied. The model will be trained on a dataset containing applicant metadata—such as age, income, credit score, years of experience, and mortgage value—and will predict whether the applicant is likely to be approved for a loan. By using dropout during both training and inference, we aim to improve the model&#39;s generalization and estimate prediction uncertainty, ultimately providing a more reliable decision-making tool for financial institutions.</span>
+<span id="cb4-34"><a href="#cb4-34"></a></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="fu">## Questions</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="ss">1.  </span>How effectively can a neural network predict whether a loan applicant will be approved or denied based on individual financial and demographic metadata?</span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="ss">2.  </span>How does the Monte Carlo Dropout technique impact the performance and generalization of a neural network in predicting loan approval outcomes?</span>
+<span id="cb4-40"><a href="#cb4-40"></a></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="fu">## Dataset</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="in">```{r}</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="co">#| label: load-dataset</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="co">#| message: false</span></span>
+<span id="cb4-48"><a href="#cb4-48"></a></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="co"># Load the necessary libraries</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="fu">library</span>(readr)</span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb4-52"><a href="#cb4-52"></a></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="co"># Load the data</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a>df <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/bankloan.csv&quot;</span>)</span>
+<span id="cb4-55"><a href="#cb4-55"></a></span>
+<span id="cb4-56"><a href="#cb4-56"></a><span class="co"># Review all predictors</span></span>
+<span id="cb4-57"><a href="#cb4-57"></a><span class="fu">summary</span>(df)</span>
+<span id="cb4-58"><a href="#cb4-58"></a></span>
+<span id="cb4-59"><a href="#cb4-59"></a><span class="co"># Analyze Mortgage predictor</span></span>
+<span id="cb4-60"><a href="#cb4-60"></a><span class="co"># View mortgage $ data</span></span>
+<span id="cb4-61"><a href="#cb4-61"></a><span class="co">#range(df$Mortgage) # $0-$635</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a></span>
+<span id="cb4-63"><a href="#cb4-63"></a><span class="co"># Count the number of values greater than 0 in the Mortgage column</span></span>
+<span id="cb4-64"><a href="#cb4-64"></a><span class="co">#count_above_zero &lt;- sum(df$Mortgage &gt; 0, na.rm = TRUE)</span></span>
+<span id="cb4-65"><a href="#cb4-65"></a></span>
+<span id="cb4-66"><a href="#cb4-66"></a><span class="co"># Get the total number of non-missing values in the column</span></span>
+<span id="cb4-67"><a href="#cb4-67"></a><span class="co">#total_values &lt;- sum(!is.na(df$Mortgage))</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="co"># Calculate the proportion</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a><span class="co">#proportion_above_zero &lt;- count_above_zero / total_values</span></span>
+<span id="cb4-71"><a href="#cb4-71"></a></span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="co"># Print the results</span></span>
+<span id="cb4-73"><a href="#cb4-73"></a><span class="co">#count_above_zero # 1,538 ppl with mortgages</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="co">#proportion_above_zero # 30.76% of people have loans</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a></span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="co"># Remove Mortgage</span></span>
+<span id="cb4-77"><a href="#cb4-77"></a><span class="co">#df &lt;- select(df, -&quot;Mortgage&quot;)</span></span>
+<span id="cb4-78"><a href="#cb4-78"></a></span>
+<span id="cb4-79"><a href="#cb4-79"></a><span class="co"># Normalize using Min-Max Scaling</span></span>
+<span id="cb4-80"><a href="#cb4-80"></a><span class="co"># df &lt;- df %&gt;%</span></span>
+<span id="cb4-81"><a href="#cb4-81"></a><span class="co">#   mutate(</span></span>
+<span id="cb4-82"><a href="#cb4-82"></a><span class="co">#     Age = (Age - min(Age)) / (max(Age) - min(Age)),</span></span>
+<span id="cb4-83"><a href="#cb4-83"></a><span class="co">#     Experience = (Experience - min(Experience)) / (max(Experience) - min(Experience)),</span></span>
+<span id="cb4-84"><a href="#cb4-84"></a><span class="co">#     Income = (Income - min(Income)) / (max(Income) - min(Income)),</span></span>
+<span id="cb4-85"><a href="#cb4-85"></a><span class="co">#     CCAvg = (CCAvg - min(CCAvg)) / (max(CCAvg) - min(CCAvg)),</span></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="co">#     Mortgage = (Mortgage - min(Mortgage, na.rm = TRUE)) / (max(Mortgage, na.rm = TRUE) - min(Mortgage, na.rm = TRUE))</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="co">#   )</span></span>
+<span id="cb4-88"><a href="#cb4-88"></a><span class="co"># </span></span>
+<span id="cb4-89"><a href="#cb4-89"></a><span class="co"># summary(df)</span></span>
+<span id="cb4-90"><a href="#cb4-90"></a><span class="in">```</span></span>
+<span id="cb4-91"><a href="#cb4-91"></a></span>
+<span id="cb4-92"><a href="#cb4-92"></a><span class="fu">### Dataset Description</span></span>
+<span id="cb4-93"><a href="#cb4-93"></a></span>
+<span id="cb4-94"><a href="#cb4-94"></a>This dataset consists of 5,000 loan applicants with 12 variables that capture demographic, financial, and credit-related factors. It includes information such as age, income, family size, credit score, employment status, and whether the applicant has certain financial accounts (e.g., a credit card or online banking). The target variable indicates whether a personal loan was approved (1) or denied (0).</span>
+<span id="cb4-95"><a href="#cb4-95"></a></span>
+<span id="cb4-96"><a href="#cb4-96"></a><span class="fu">#### **Dimensions**:</span></span>
+<span id="cb4-97"><a href="#cb4-97"></a></span>
+<span id="cb4-98"><a href="#cb4-98"></a><span class="ss">-   </span>**Rows**: 5000 (employees)</span>
+<span id="cb4-99"><a href="#cb4-99"></a><span class="ss">-   </span>**Columns**: 12 variables that capture demographic, financial, etc.</span>
+<span id="cb4-100"><a href="#cb4-100"></a></span>
+<span id="cb4-101"><a href="#cb4-101"></a><span class="fu">#### **Key Variables**:</span></span>
+<span id="cb4-102"><a href="#cb4-102"></a></span>
+<span id="cb4-103"><a href="#cb4-103"></a><span class="ss">-   </span>**Numerical**: Age, Income, Years of Experience, Credit Score, Mortgage, etc.</span>
+<span id="cb4-104"><a href="#cb4-104"></a><span class="ss">-   </span>**Categorical**: Gender, Job Role, Family Size, Education, Personal Loan Status, etc.</span>
+<span id="cb4-105"><a href="#cb4-105"></a></span>
+<span id="cb4-106"><a href="#cb4-106"></a><span class="fu">#### **Provenance**:</span></span>
+<span id="cb4-107"><a href="#cb4-107"></a></span>
+<span id="cb4-108"><a href="#cb4-108"></a>The dataset is synthetic, designed for research on employee wellbeing, workplace dynamics, and productivity, incorporating common variables seen in employee surveys.</span>
+<span id="cb4-109"><a href="#cb4-109"></a></span>
+<span id="cb4-110"><a href="#cb4-110"></a><span class="fu">#### **Reason for Choosing**:</span></span>
+<span id="cb4-111"><a href="#cb4-111"></a></span>
+<span id="cb4-112"><a href="#cb4-112"></a>It’s relevant for analyzing the impact of work environments (remote, hybrid, onsite) on mental health, work-life balance, and productivity, making it valuable for HR and organizational studies.</span>
+<span id="cb4-113"><a href="#cb4-113"></a></span>
+<span id="cb4-114"><a href="#cb4-114"></a><span class="fu">## **Priors - Parameters &amp; Hyperparameters:**</span></span>
+<span id="cb4-115"><a href="#cb4-115"></a></span>
+<span id="cb4-116"><a href="#cb4-116"></a>For the model, Gaussian distributions are used for priors, aligning with the smoothness and differentiability needed for effective optimization. The key features influencing stress levels, such as age, job role, work location, mental health condition, and hours worked, will determine the priors.</span>
+<span id="cb4-117"><a href="#cb4-117"></a></span>
+<span id="cb4-118"><a href="#cb4-118"></a>**Parameter Initialization:**</span>
+<span id="cb4-119"><a href="#cb4-119"></a></span>
+<span id="cb4-120"><a href="#cb4-120"></a><span class="ss">-   </span>**Weights (W_ij):** The weights will be initialized using a Gaussian distribution with: Wij∼N(0,0.5)Wij​∼N(0,0.5)\</span>
+<span id="cb4-121"><a href="#cb4-121"></a>    where μ = 0 and σ = 0.5.</span>
+<span id="cb4-122"><a href="#cb4-122"></a></span>
+<span id="cb4-123"><a href="#cb4-123"></a><span class="ss">-   </span>**Biases (b_j):** The biases will have a smaller variance to remain near zero: bj∼N(0,0.1)bj​∼N(0,0.1)\</span>
+<span id="cb4-124"><a href="#cb4-124"></a>    where μ = 0 and σ = 0.1.</span>
+<span id="cb4-125"><a href="#cb4-125"></a></span>
+<span id="cb4-126"><a href="#cb4-126"></a>**Hyperparameters:**</span>
+<span id="cb4-127"><a href="#cb4-127"></a></span>
+<span id="cb4-128"><a href="#cb4-128"></a><span class="ss">-   </span>**Model Architecture:** 4 hidden layers with 128, 64, 32, and 16 units, respectively.</span>
+<span id="cb4-129"><a href="#cb4-129"></a></span>
+<span id="cb4-130"><a href="#cb4-130"></a><span class="ss">-   </span>**Activation Functions:** ReLU for hidden layers, Sigmoid for output layer.</span>
+<span id="cb4-131"><a href="#cb4-131"></a></span>
+<span id="cb4-132"><a href="#cb4-132"></a><span class="ss">-   </span>**Training Configuration:**</span>
+<span id="cb4-133"><a href="#cb4-133"></a></span>
+<span id="cb4-134"><a href="#cb4-134"></a><span class="ss">    -   </span>Training data: 80%, Testing data: 20%</span>
+<span id="cb4-135"><a href="#cb4-135"></a></span>
+<span id="cb4-136"><a href="#cb4-136"></a><span class="ss">    -   </span>Epochs: 30</span>
+<span id="cb4-137"><a href="#cb4-137"></a></span>
+<span id="cb4-138"><a href="#cb4-138"></a><span class="ss">    -   </span>Batch Size: 5</span>
+<span id="cb4-139"><a href="#cb4-139"></a></span>
+<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">    -   </span>Loss Function: Binary Cross-Entropy</span>
+<span id="cb4-141"><a href="#cb4-141"></a></span>
+<span id="cb4-142"><a href="#cb4-142"></a><span class="ss">-   </span>**Optimization:** Adam optimizer, known for its efficiency in handling complex, non-convex optimization problems like neural network training.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
