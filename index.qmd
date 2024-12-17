@@ -100,8 +100,7 @@ To predict loan approval decisions using a **Bayesian Neural Network (BNN)** wit
 
 ### 5. **Insights and Application**
 
--   Provide actionable insights for organizations to improve employee well-being based on predicted stress levels and key contributing factors.
--   Evaluate the impact of various metadata (e.g., job role, work location, mental health conditions) on stress predictions.
+-   Our BNN model can determine with great accuracy the classification labels for determining if a loan applicant will be approved for a personal loan, but can be also be used for any type of classification task if given a correlated dataset.
 
 ## 1. Data Loading & Preprocessing
 
@@ -296,4 +295,6 @@ print(predicted_classes)
 
 ## Conclusion:
 
-The model uses **Monte Carlo Dropout** for regularization and uncertainty estimation, which improves generalization and provides confidence in predictions, crucial for applications like predicting classification labels.
+We were able to successfully produce a **BNN** that accurately predicts classification labels for a multi-variable dataset and keep said model from overfitting the data by utilizing the **MC Dropout** technique.
+
+While our model was used specifically to determine if a loan applicant would be approved for a personal loan, it can also be used to determine if an applicant will be approved for any type of loan (car, mortgage, business etc.) or applied to any field that has a sufficiently-sampled, correlated dataset, and still provide a high degree of accuracy in predicting classification labels.
