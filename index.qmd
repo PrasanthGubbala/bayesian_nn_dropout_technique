@@ -19,7 +19,7 @@ execute:
 
 ## Abstract
 
-This project aims to develop a**Bayesian Neural Network** with **Monte Carlo Dropout** to predict whether a loan applicant will be approved for a personal loan, using a dataset of 5,000 samples. The dataset includes 12 variables representing various aspects of the applicant's financial profile, including age, income, credit score, and account types. The model will incorporate dropout regularization to prevent overfitting and improve generalization. The goal is to evaluate the model's ability to accurately predict loan approval and assess how well Monte Carlo Dropout regulates the model, preventing overfitting and enhancing prediction accuracy. This approach offers insights into the potential of BNNs in financial decision-making and the effectiveness of dropout techniques in improving model performance.
+This project aims to develop a **Bayesian Neural Network** with **Monte Carlo Dropout** to predict whether a loan applicant will be approved for a personal loan, using a dataset of 5,000 samples. The dataset includes 12 variables representing various aspects of the applicant's financial profile, including age, income, credit score, and account types. The model will incorporate dropout regularization to prevent overfitting and improve generalization. The goal is to evaluate the model's ability to accurately predict loan approval and assess how well Monte Carlo Dropout regulates the model, preventing overfitting and enhancing prediction accuracy. This approach offers insights into the potential of BNNs in financial decision-making and the effectiveness of dropout techniques in improving model performance.
 
 ## Introduction
 
@@ -62,7 +62,7 @@ The primary goal of this project is to explore the effectiveness of predicting l
 
 ## Approach Overview
 
-To predict loan approval decisions using a **Bayesian Neural Network (BNN)** with \*Monte Carlo Dropout\*\*, we will follow a structured approach involving data preprocessing, model development, and performance evaluation. The goal is to train a neural network to classify whether a loan applicant will be approved or denied, leveraging a stratified dataset with various demographic and financial features.
+To predict loan approval decisions using a **Bayesian Neural Network (BNN)** with **Monte Carlo Dropout**, we will follow a structured approach involving data preprocessing, model development, and performance evaluation. The goal is to train a neural network to classify whether a loan applicant will be approved or denied, leveraging a stratified dataset with various demographic and financial features.
 
 #### 1. **Data Preprocessing**
 
@@ -296,6 +296,4 @@ print(predicted_classes)
 
 ## Conclusion:
 
-The model uses **Monte Carlo Dropout** for regularization and uncertainty estimation, which improves generalization and provides confidence in predictions, crucial for applications like predicting employee stress levels.
-
-DCA, see what variables are imprortant. Bayesian linear regression.
+The model uses **Monte Carlo Dropout** for regularization and uncertainty estimation, which improves generalization and provides confidence in predictions, crucial for applications like predicting classification labels.
