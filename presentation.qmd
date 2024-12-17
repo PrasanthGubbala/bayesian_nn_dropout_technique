@@ -1,7 +1,7 @@
 ---
 title: "Regularization of Bayesian Neural Networks with Dropout Nodes"
-subtitle: "INFO 510 - Fall 2023 - Final Project"
-author: "Author names"
+subtitle: "INFO 510 Bayesian Modeling & Inference - Fall 2023 - Final Project"
+author: "[Gubbala Durga Prasanth Kendall Beaver V.S. Murali Krishna Chittlu]"
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
@@ -24,6 +24,15 @@ execute:
 pacman::p_load(tidymodels,
                tidyverse)
 
+# Install Keras if not already installed
+# Load the keras library
+library(keras)
+library(dplyr)
+library(tidyr)
+
+# Install TensorFlow backend (if you haven't already installed it)
+# install_keras()
+
 ```
 
 ```{r}
@@ -43,148 +52,68 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-#| label: load-data
-#| include: false
-# Load data here
-data(mtcars)
-mtcars$speed <- mtcars$hp / mtcars$wt
-
-data("penguins")
-```
-
-```{r}
 # Load the necessary libraries
 library(readr)
 library(dplyr)
 
 # Load the data
-employee_data <- read_csv("data/Impact_of_Remote_Work_on_Mental_Health.csv")
+df <- read_csv("data/bankloan.csv")
 
-# Check the first few rows of the data
-# head(employee_data)
+# Review all predictors
+#summary(df)
 
-# Check for missing values
-# summary(employee_data)
+# Analyze Mortgage predictor
+# View mortgage $ data
+#range(df$Mortgage) # $0-$635
 
-# colSums(is.na(employee_data)) 
+# Count the number of values greater than 0 in the Mortgage column
+#count_above_zero <- sum(df$Mortgage > 0, na.rm = TRUE)
 
-# Example of replacing NA in 'Mental_Health_Condition' with 'Unknown'
-employee_data$Mental_Health_Condition[is.na(employee_data$Mental_Health_Condition)] <- "Unknown"
+# Get the total number of non-missing values in the column
+#total_values <- sum(!is.na(df$Mortgage))
 
-# If you want to remove rows with NA values
-employee_data <- na.omit(employee_data)
+# Calculate the proportion
+#proportion_above_zero <- count_above_zero / total_values
 
+# Print the results
+#count_above_zero # 1,538 ppl with mortgages
+#proportion_above_zero # 30.76% of people have loans
 
+# Remove Mortgage
+#df <- select(df, -"Mortgage")
 
-# Load required package
-library(dplyr)
+# Normalize using Min-Max Scaling
+df <- df %>%
+  mutate(
+    Age = (Age - min(Age)) / (max(Age) - min(Age)),
+    Experience = (Experience - min(Experience)) / (max(Experience) - min(Experience)),
+    Income = (Income - min(Income)) / (max(Income) - min(Income)),
+    CCAvg = (CCAvg - min(CCAvg)) / (max(CCAvg) - min(CCAvg)),
+    Mortgage = (Mortgage - min(Mortgage, na.rm = TRUE)) / (max(Mortgage, na.rm = TRUE) - min(Mortgage, na.rm = TRUE))
+  )
 
-# Function to remove outliers using IQR for all numeric columns
-remove_outliers_all <- function(df) {
-  # Loop over each column in the data frame
-  for (col_name in names(df)) {
-    # Check if the column is numeric
-    if (is.numeric(df[[col_name]])) {
-      Q1 <- quantile(df[[col_name]], 0.25, na.rm = TRUE)
-      Q3 <- quantile(df[[col_name]], 0.75, na.rm = TRUE)
-      IQR_value <- Q3 - Q1
-      lower_bound <- Q1 - 1.5 * IQR_value
-      upper_bound <- Q3 + 1.5 * IQR_value
-      
-      # Filter rows where values are within the bounds
-      df <- df %>% filter(df[[col_name]] >= lower_bound & df[[col_name]] <= upper_bound)
-    }
-  }
-  return(df)
-}
+summary(df)
+```
 
-# Example: Removing outliers in all numeric columns of employee_data
-employee_data_clean <- remove_outliers_all(employee_data)
-
-# Print the cleaned data
-# print(employee_data_clean)
-
-
-# Step 1: Select the relevant features
-df_relevant <- employee_data_clean %>%
-  select(Work_Location, Hours_Worked_Per_Week, Work_Life_Balance_Rating, 
-         Mental_Health_Condition, Social_Isolation_Rating, 
-         Satisfaction_with_Remote_Work, Sleep_Quality, Stress_Level)  # assuming 'Stress_Level' is the target variable
-
-
-# Step 4: Feature Engineering
-# Create a new 'Health_Condition_Severity' feature based on 'Mental_Health_Condition'
-df_relevant$Health_Condition_Severity <- ifelse(df_relevant$Mental_Health_Condition %in% c("Depression", "Burnout", "Anxiety"), "High", "Low")
-
-# Categorize 'Hours_Worked_Per_Week' into ranges (Low, Medium, High)
-df_relevant$Work_Hours_Category <- cut(df_relevant$Hours_Worked_Per_Week, 
-                                       breaks = c(0, 35, 45, Inf), 
-                                       labels = c("Low", "Medium", "High"))
-
-df = df_relevant
-
-
-# Convert the target variable to a factor & factors into dummy variables (one-hot encoding)
-# 0, 1, 2 for Setosa, Versicolor, Virginica
-df$Work_Location <- as.factor(df$Work_Location)
-df$Work_Location <- as.numeric(df$Work_Location) - 1  
-
-df$Mental_Health_Condition <- as.factor(df$Mental_Health_Condition)
-df$Mental_Health_Condition <- as.numeric(df$Mental_Health_Condition) - 1 
-
-df$Satisfaction_with_Remote_Work <- as.factor(df$Satisfaction_with_Remote_Work)
-df$Satisfaction_with_Remote_Work <- as.numeric(df$Satisfaction_with_Remote_Work) - 1 
-
-df$Sleep_Quality <- as.factor(df$Sleep_Quality)
-df$Sleep_Quality <- as.numeric(df$Sleep_Quality) - 1 
-
-df$Stress_Level <- as.factor(df$Stress_Level)
-df$Stress_Level <- as.numeric(df$Stress_Level) - 1 
-
-df$Health_Condition_Severity <- as.factor(df$Health_Condition_Severity)
-df$Health_Condition_Severity <- as.numeric(df$Health_Condition_Severity) - 1 
-
-df$Work_Hours_Category <- as.factor(df$Work_Hours_Category)
-df$Work_Hours_Category <- as.numeric(df$Work_Hours_Category) - 1 
-
-
-
-# Normalize the features
-df_without_target <- as.data.frame(scale(df[, setdiff(names(df), "Stress_Level")]))  # Only scale the features
-
-# Combine the scaled features and the target label
-df <- cbind(df_without_target, Stress_Level = df$Stress_Level)
-
-
-# Install Keras if not already installed
-# Load the keras library
-library(keras)
-library(dplyr)
-library(tidyr)
-
-# Install TensorFlow backend (if you haven't already installed it)
-# install_keras()
-
-
+```{r}
 # Split the data into training and testing sets (80-20 split)
 set.seed(42)  # For reproducibility
 index <- sample(1:nrow(df), size = 0.8 * nrow(df))
 train_data <- df[index, ]
 test_data <- df[-index, ]
 
-# Separate features and target labels
-x_train <- as.matrix(train_data[, 1:9])
-y_train <- to_categorical(train_data$Stress_Level, 3)  # Convert to one-hot encoding
+## Separate features and target labels
+x_train <- as.matrix(train_data[, -8])  # Exclude the 8th column (response variable, Personal Loan)
+y_train <- (train_data$`Personal.Loan`)  # Use Personal Loan as target variable (0 or 1)
 
-x_test <- as.matrix(test_data[, 1:9])
-y_test <- to_categorical(test_data$Stress_Level, 3)
-
+x_test <- as.matrix(test_data[, -8])  # Exclude the 8th column (response variable, Personal Loan)
+y_test <- (test_data$`Personal.Loan`)  # Use Personal Loan as target variable (0 or 1)
 ```
 
-## Neural Network with MC Dropout  
+## Neural Network with MC Dropout
 
 ```{r}
-# Define the neural network model with 2 hidden layers and dropout
+# Define the neural network model with 'x' amount hidden layers and dropout
 model <- keras_model_sequential() %>%
   # First hidden layer with 128 neurons and ReLU activation
   layer_dense(units = 128, activation = "relu", input_shape = dim(x_train)[2]) %>%
@@ -201,18 +130,18 @@ model <- keras_model_sequential() %>%
   # Dropout layer again
   layer_dropout(rate = 0.5) %>%
   
-  # third hidden layer with 16 neurons and ReLU activation
+  # fourth hidden layer with 16 neurons and ReLU activation
   layer_dense(units = 16, activation = "relu") %>%
   # Dropout layer again
   layer_dropout(rate = 0.6) %>%
   
-  # Output layer with Softmax activation for multi-class classification
-  layer_dense(units = 3, activation = "softmax")
+  # Output layer with Sigmoid activation for binary classification
+  layer_dense(units = 1, activation = "sigmoid")
 
-# Compile the model with cross-entropy loss and Adam optimizer
+## Compile the model with Adam optimizer and binary crossentropy loss
 model %>% compile(
-  loss = "categorical_crossentropy",
-  optimizer = optimizer_adam(),
+  loss = "binary_crossentropy",
+  optimizer = optimizer_adam(learning_rate = 0.001),
   metrics = c("accuracy")
 )
 
@@ -225,7 +154,7 @@ summary(model)
 ```{r}
 history <- model %>% fit(
   x_train, y_train,
-  epochs = 50,
+  epochs = 30,
   batch_size = 5,
   validation_data = list(x_test, y_test)
 )
@@ -247,24 +176,34 @@ history_df <- data.frame(epoch = 1:length(history$metrics$loss),
 library(ggplot2)
 
 # Plot Loss and Validation Loss
-ggplot(history_df, aes(x = epoch)) +
+loss_plot <- ggplot(history_df, aes(x = epoch)) +
   geom_line(aes(y = loss, color = "Training Loss")) +
   geom_line(aes(y = val_loss, color = "Validation Loss")) +
-  labs(title = "Loss and Validation Loss", x = "Epoch", y = "Loss") +
+  labs(title = "Training and Validation Loss", x = "Epoch", y = "Loss") +
   scale_color_manual(values = c("Training Loss" = "blue", "Validation Loss" = "red")) +
   theme_minimal()
+
+print(loss_plot)
+
+# ggsave("loss_plot.png", plot = loss_plot, width = 8, height = 6)̧
 ```
 
 ## Accuracy and Validation Accuracy
 
 ```{r}
 # Plot Accuracy and Validation Accuracy
-ggplot(history_df, aes(x = epoch)) +
+accuracy_plot <- ggplot(history_df, aes(x = epoch)) +
   geom_line(aes(y = accuracy, color = "Training Accuracy")) +
   geom_line(aes(y = val_accuracy, color = "Validation Accuracy")) +
-  labs(title = "Accuracy and Validation Accuracy", x = "Epoch", y = "Accuracy") +
+  labs(title = "Training and Validation Accuracy", x = "Epoch", y = "Accuracy") +
   scale_color_manual(values = c("Training Accuracy" = "green", "Validation Accuracy" = "orange")) +
   theme_minimal()
+
+# Display the plot
+print(accuracy_plot)
+
+# Save the plot to a file
+# ggsave("accuracy_plot.png", plot = accuracy_plot, width = 8, height = 6, dpi = 300)̧
 ```
 
 ## **Performance Evaluation**
@@ -277,7 +216,19 @@ model %>% evaluate(x_test, y_test)
 
 ```{r}
 predictions <- model %>% predict(x_test)
-predicted_classes <- max.col(predictions) - 1  # Convert from one-hot to class index
-print(predicted_classes)
+predicted_classes <- ifelse(predictions > 0.5, 1, 0)
+
+# Reshape predicted_classes into a matrix with 10 columns
+reshaped_predictions <- matrix(predicted_classes, ncol = 10, byrow = TRUE)
+
+# Print the reshaped predictions
+print(reshaped_predictions)
+
+# Flatten the data frame into a single vector
+prop_of_loan_approvals <- as.vector(reshaped_predictions)
+
+# Count the number of 1's and 0's
+counts <- table(prop_of_loan_approvals)
+print(counts)
 
 ```

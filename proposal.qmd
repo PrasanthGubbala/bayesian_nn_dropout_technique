@@ -5,7 +5,7 @@ author:
   - name: "Dropout Dynamics"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "This project aims to predict employee stress levels (low, medium, or high) using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model's generalization and estimate prediction uncertainty. The model will be trained on a diverse dataset of 5,000 employee samples, incorporating factors like age, job role, hours worked, and mental health conditions. The project explores how effectively a neural network can predict stress based on employee metadata and the impact of dropout regularization on model performance, ultimately helping organizations better support employee well-being."
+description: "This project aims to predict the likelihood of a loan applicant being approved or denied using a neural network enhanced with Monte Carlo Dropout regularization. By applying dropout during both training and inference, we aim to improve the model's generalization and estimate prediction uncertainty. The model will be trained on a dataset of 5,000 loan applications, incorporating factors such as age, income, credit score, years of experience, and mortgage value. The project explores how effectively a neural network can predict loan approval based on applicant metadata and the impact of dropout regularization on model performance. Ultimately, this model aims to provide a more reliable and robust decision-making tool for financial institutions."
 format:
   html:
     code-tools: true
@@ -28,13 +28,13 @@ pacman::p_load(tidyverse)
 
 ## Project Goal
 
-Our goal is to create a Bayesian Neural Network, with the help of the Monte Carlo Dropout regularization technique, that can accurately predict the stress level of any employee across the world, where stress level is defined as low, medium, and high, and the employee as working in a role that is remote, hybrid, or onsite. So given metadata about an employee—their gender, age, health, job and industry, how many hours they work, etc.—our model will predict a single value as to what their stress level will most likely be.
+The goal of this project is to develop a Bayesian Neural Network, enhanced with the Monte Carlo Dropout regularization technique, to accurately predict the likelihood of a loan applicant being approved or denied. The model will be trained on a dataset containing applicant metadata—such as age, income, credit score, years of experience, and mortgage value—and will predict whether the applicant is likely to be approved for a loan. By using dropout during both training and inference, we aim to improve the model's generalization and estimate prediction uncertainty, ultimately providing a more reliable decision-making tool for financial institutions.
 
 ## Questions
 
-1.  How effectively can a neural network predict employee stress levels worldwide using specific individual and career-related metadata?
+1.  How effectively can a neural network predict whether a loan applicant will be approved or denied based on individual financial and demographic metadata?
 
-2.  How does the dropout technique impact the performance and optimization of a neural network in predicting stress levels?
+2.  How does the Monte Carlo Dropout technique impact the performance and generalization of a neural network in predicting loan approval outcomes?
 
 ## Dataset
 
@@ -42,55 +42,97 @@ Our goal is to create a Bayesian Neural Network, with the help of the Monte Carl
 #| label: load-dataset
 #| message: false
 
-# Set the path to the CSV file
-dataset_path <- "data/Impact_of_Remote_Work_on_Mental_Health.csv"  # Adjust this to the actual path
+# Load the necessary libraries
+library(readr)
+library(dplyr)
 
-# Load the dataset into a dataframe
-data <- read.csv(dataset_path)
+# Load the data
+df <- read_csv("data/bankloan.csv")
 
-# Preview the dataset
-head(data)
+# Review all predictors
+summary(df)
 
-```
+# Analyze Mortgage predictor
+# View mortgage $ data
+#range(df$Mortgage) # $0-$635
 
-```{r}
-summary(data)
+# Count the number of values greater than 0 in the Mortgage column
+#count_above_zero <- sum(df$Mortgage > 0, na.rm = TRUE)
+
+# Get the total number of non-missing values in the column
+#total_values <- sum(!is.na(df$Mortgage))
+
+# Calculate the proportion
+#proportion_above_zero <- count_above_zero / total_values
+
+# Print the results
+#count_above_zero # 1,538 ppl with mortgages
+#proportion_above_zero # 30.76% of people have loans
+
+# Remove Mortgage
+#df <- select(df, -"Mortgage")
+
+# Normalize using Min-Max Scaling
+# df <- df %>%
+#   mutate(
+#     Age = (Age - min(Age)) / (max(Age) - min(Age)),
+#     Experience = (Experience - min(Experience)) / (max(Experience) - min(Experience)),
+#     Income = (Income - min(Income)) / (max(Income) - min(Income)),
+#     CCAvg = (CCAvg - min(CCAvg)) / (max(CCAvg) - min(CCAvg)),
+#     Mortgage = (Mortgage - min(Mortgage, na.rm = TRUE)) / (max(Mortgage, na.rm = TRUE) - min(Mortgage, na.rm = TRUE))
+#   )
+# 
+# summary(df)
 ```
 
 ### Dataset Description
 
-This dataset contains information on **5000 employees** from various industries, focusing on demographics, work-related factors, and mental health. It includes **20 variables**, such as age, job role, work location, mental health condition, work-life balance, and productivity changes.
+This dataset consists of 5,000 loan applicants with 12 variables that capture demographic, financial, and credit-related factors. It includes information such as age, income, family size, credit score, employment status, and whether the applicant has certain financial accounts (e.g., a credit card or online banking). The target variable indicates whether a personal loan was approved (1) or denied (0).
 
 #### **Dimensions**:
 
 -   **Rows**: 5000 (employees)
--   **Columns**: 20 (attributes like Age, Gender, Job Role, etc.)
+-   **Columns**: 12 variables that capture demographic, financial, etc.
 
 #### **Key Variables**:
 
--   **Numerical**: Age, Years of Experience, Hours Worked, Stress Level, Social Isolation, etc.
--   **Categorical**: Gender, Job Role, Work Location, Mental Health Condition, etc.
+-   **Numerical**: Age, Income, Years of Experience, Credit Score, Mortgage, etc.
+-   **Categorical**: Gender, Job Role, Family Size, Education, Personal Loan Status, etc.
 
 #### **Provenance**:
 
-The dataset appears synthetic, created for studying employee wellbeing, workplace dynamics, and productivity. It reflects common variables used in employee surveys or organizational studies.
+The dataset is synthetic, designed for research on employee wellbeing, workplace dynamics, and productivity, incorporating common variables seen in employee surveys.
 
 #### **Reason for Choosing**:
 
-This dataset is relevant for exploring the impact of work environments (remote, hybrid, onsite) on employee mental health, work-life balance, and productivity. It’s ideal for analyzing workplace wellbeing, stress, and diversity, making it valuable for HR and organizational research.
+It’s relevant for analyzing the impact of work environments (remote, hybrid, onsite) on mental health, work-life balance, and productivity, making it valuable for HR and organizational studies.
 
-## Priors - Parameters & Hyperparameters
+## **Priors - Parameters & Hyperparameters:**
 
-Since Gaussian distributions are smooth and differentiable and crucial for optimization in neural networks, we will use Gaussians as our priors, utilizing the parameters **age**, **gender**, **industry**, **work location**, and **hours worked** as main features. We will also explore the possibility of other parameters influencing the priors.
+For the model, Gaussian distributions are used for priors, aligning with the smoothness and differentiability needed for effective optimization. The key features influencing stress levels, such as age, job role, work location, mental health condition, and hours worked, will determine the priors.
 
-Since we plan on using a basic feedforward neural network with a few layers, we need to set the values ( \mu ) (mean) and ( \sigma ) (standard deviation) for the model parameters: the weights (( W\_{ij} )) and biases (( b_j )).
+**Parameter Initialization:**
 
--   The weights ( W\_{ij} ) will tend to take on positive or negative values for ( \mu ), and for the standard deviation ( \sigma ), we set:
+-   **Weights (W_ij):** The weights will be initialized using a Gaussian distribution with: Wij∼N(0,0.5)Wij​∼N(0,0.5)\
+    where μ = 0 and σ = 0.5.
 
-    \[ W\_{ij} \sim \mathcal{N}(0, 0.5) \]
+-   **Biases (b_j):** The biases will have a smaller variance to remain near zero: bj∼N(0,0.1)bj​∼N(0,0.1)\
+    where μ = 0 and σ = 0.1.
 
--   Since biases are often kept near 0 in basic feedforward neural networks, we have chosen ( \mu ) and ( \sigma ) to reflect this:
+**Hyperparameters:**
 
-    \[ b_j \sim \mathcal{N}(0, 0.1) \]
+-   **Model Architecture:** 4 hidden layers with 128, 64, 32, and 16 units, respectively.
 
-These parameters depend on the values we set for hyperparameters. For our initial test, we plan on using: - **2 hidden layers** - **50 neurons per layer** - **ReLU activation** for the hidden layers - **Softmax function** for the output layer - **Dropout rate (p) of 0.3**, since the model tends to overfit the data when ( p = 0.1 ) and also overfits when ( p = 0.5.
+-   **Activation Functions:** ReLU for hidden layers, Sigmoid for output layer.
+
+-   **Training Configuration:**
+
+    -   Training data: 80%, Testing data: 20%
+
+    -   Epochs: 30
+
+    -   Batch Size: 5
+
+    -   Loss Function: Binary Cross-Entropy
+
+-   **Optimization:** Adam optimizer, known for its efficiency in handling complex, non-convex optimization problems like neural network training.
