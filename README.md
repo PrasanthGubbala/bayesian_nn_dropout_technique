@@ -44,24 +44,6 @@ BNNs and MC Dropout effectively prevent overfitting and improve loan approval pr
 - Scale with **distributed training** for larger datasets.
 - Explore **model explainability** for transparent decision-making.
 
-## Getting Started
-
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/loan-approval-bnn.git
-    cd loan-approval-bnn
-    ```
-
-2. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Run the model:
-    ```bash
-    python main.py
-    ```
-
 ## Authors
 
 - **Gubbala Durga Prasanth**: Machine Learning, AI
@@ -69,4 +51,5 @@ BNNs and MC Dropout effectively prevent overfitting and improve loan approval pr
 - **V.S. Murali Krishna Chittlu**: Machine Learning, AI
 - **Dr. Kunal Arekar**: Bayesian Modeling, Deep Learning
 
-For questions, contact **Dr. Kunal Arekar** at [kunalarekar@arizona.edu] or any of the above authors.
+For questions, contact any of above authors or **Dr. Kunal Arekar** at [kunalarekar@arizona.edu](mailto:kunalarekar@arizona.edu).
+
