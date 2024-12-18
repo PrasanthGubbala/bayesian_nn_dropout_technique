@@ -1,7 +1,7 @@
 ---
 title: "Regularization of Bayesian Neural Networks with Dropout Nodes"
 subtitle: "INFO 510 Bayesian Modeling & Inference - Fall 2023 - Final Project"
-author: "[Gubbala Durga Prasanth Kendall Beaver V.S. Murali Krishna Chittlu]"
+author: ["Gubbala Durga Prasanth", "Kendall Beaver", "V.S. Murali Krishna Chittlu"]
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
